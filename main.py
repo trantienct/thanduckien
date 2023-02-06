@@ -28,6 +28,7 @@ class Ewallet:
             data['no'] = self.storage[-1]['no'] + 1
         data['type'] = 'deposit'
         data['money'] = money
+        conn.execute()
         self.storage.append(data)
     def withdraw(self):
         money = input('Nhập số tiền bạn muốn rút:')

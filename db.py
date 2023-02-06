@@ -12,4 +12,14 @@ def createTable():
         balance FLOAT
         );
     ''')
+    conn.execute('DROP TABLE IF EXISTS history')
+    conn.execute('''
+            CREATE TABLE IF NOT EXISTS history
+            (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            htype TEXT,
+            money FLOAT
+            );
+        ''')
+
     conn.commit()
