@@ -1,6 +1,6 @@
 from db import *
 
-createTable()
+
 def printHello():
     print('Hello')
 
@@ -55,6 +55,7 @@ account1 = Ewallet('Than Duc Kien', 0)
 # account1.withdraw(1000)
 # account1.history()
 luachon = 0
+createTable()
 while luachon >= 0:
     if luachon ==1:
         account1.view()
