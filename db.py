@@ -1,8 +1,9 @@
 import sqlite3
 
 conn = sqlite3.connect('account.db')
-conn.execute('DROP TABLE IF EXISTS account')
+
 def createTable():
+    conn.execute('DROP TABLE IF EXISTS account')
     conn.execute('''
         CREATE TABLE IF NOT EXISTS account
         (
@@ -12,4 +13,3 @@ def createTable():
         );
     ''')
     conn.commit()
-
