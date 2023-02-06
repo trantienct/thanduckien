@@ -1,3 +1,6 @@
+from db import *
+
+createTable()
 def printHello():
     print('Hello')
 
