@@ -1,6 +1,6 @@
 from db import *
-
-
+from tkinter import *
+root = Tk()
 def printHello():
     print('Hello')
 
@@ -12,8 +12,11 @@ class Ewallet:
     def view(self):
         cur = conn.execute('SELECT * FROM account')
         row = cur.fetchone()
-        print(f'account name: {row[1]}')
-        print(f'balance: {row[2]}')
+        view = Toplevel(root)
+        view.geometry('100x100')
+        lblAcountName = Label(view, text=self.account_name)
+        lblAcountName.grid(column=0, row=0)
+        view.mainloop()
     def addAccount(self):
         conn.execute('INSERT INTO account (account_name, balance) values (?,?) ', (self.account_name, self.balance,))
         conn.commit()
@@ -64,29 +67,29 @@ class Ewallet:
             print(i)
 
 # createTable()
-account1 = Ewallet('Than Duc Kien', 0)
-account1.addAccount()
-# account1.view()
-# account1.deposit(2000)
-# account1.withdraw(1000)
-# account1.history()
-luachon = 0
 
-while luachon >= 0:
-    if luachon ==1:
-        account1.view()
-    elif luachon ==2:
-        account1.deposit()
-    elif luachon ==3:
-        account1.withdraw()
-    elif luachon ==4:
-        account1.history()
-    print('Chọn chức năng: ')
-    print('1: Xem số dư')
-    print('2: Nạp tiền')
-    print('3: Rút tiền')
-    print('4: Lịch sử giao dịch')
-    print('0: Thoát')
-    luachon = int(input('Nhập số theo Menu trên: '))
-    if luachon == 0:
-        break
+# account1.addAccount()
+# # account1.view()
+# # account1.deposit(2000)
+# # account1.withdraw(1000)
+# # account1.history()
+# luachon = 0
+#
+# while luachon >= 0:
+#     if luachon ==1:
+#         account1.view()
+#     elif luachon ==2:
+#         account1.deposit()
+#     elif luachon ==3:
+#         account1.withdraw()
+#     elif luachon ==4:
+#         account1.history()
+#     print('Chọn chức năng: ')
+#     print('1: Xem số dư')
+#     print('2: Nạp tiền')
+#     print('3: Rút tiền')
+#     print('4: Lịch sử giao dịch')
+#     print('0: Thoát')
+#     luachon = int(input('Nhập số theo Menu trên: '))
+#     if luachon == 0:
+#         break

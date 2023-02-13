@@ -1,13 +1,14 @@
 from tkinter import *
+from main import *
 
-root = Tk()
 root.title('E-wallet')
 root.geometry('500x500')
+account1 = Ewallet('Than Duc Kien', 0)
 
 lblTitle = Label(root, text='E-wallet')
 lblTitle.grid(column=0, row=0, columnspan=3)
 
-lblMenu1 = Label(root, text='Chon chuc nang')
-lblMenu1.grid(column=0, row=1)
+btnView = Button(root, text='View', command=account1.view)
+btnView.grid(column=0, row=1)
 
 root.mainloop()
