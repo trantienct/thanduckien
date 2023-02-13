@@ -13,39 +13,37 @@ class Ewallet:
         cur = conn.execute('SELECT * FROM account')
         row = cur.fetchone()
         view = Toplevel(root)
-        view.geometry('100x100')
-        lblAcountName = Label(view, text='account name:' + self.account_name)
+        view.geometry('250x100')
+        lblAcountName = Label(view, text="Account Name: " + self.account_name)
         lblAcountName.grid(column=0, row=0, sticky='w')
-        lblBalance = Label(view, text ="Balance: " + str(self.balance))
-        lblBalance.grid(column=0, row =1, sticky='w')
-
+        lblBalance = Label(view, text="Balance: " + str(self.balance) )
+        lblBalance.grid(column=0, row=1, sticky='w')
         view.mainloop()
     def addAccount(self):
         conn.execute('INSERT INTO account (account_name, balance) values (?,?) ', (self.account_name, self.balance,))
         conn.commit()
     def deposit(self):
+        def depositMoney():
+            htype = "deposit"
+            money = entry.get()
+            self.balance = self.balance + int(money)
+            Id = 1
+            conn.execute('UPDATE account SET balance = ? WHERE id =?', (self.balance, Id))
+            conn.execute('INSERT INTO history (htype, money) VALUES(?,?)', (htype, money,))
+            conn.commit()
+            deposit.withdraw()
         money = ''
-        view = Toplevel(root)
-        view.geometry('100x100')
-        lblMoney = Label(view, text='Type money you want to deposit')
-        lblMoney.grid(column=0, row =0, sticky='w')
-        EntryMoney = Entry(view, textvariable=money)
-        EntryMoney.grid(column=1, row = 0, sticky='w')
-        btnSubmit = Button(view,  text = 'submit')
-        btnSubmit.grid(column=0, row =1, sticky='w')
-        # self.balance = self.balance + int(money)
-        print(f'Balance: {self.balance}')
-        htype = "deposit"
-        # data = {'no':'', 'type': '', 'money':''}
-        # if len(self.storage) == 0:
-        #     data['no'] = 1
-        # else:
-        #     data['no'] = self.storage[-1]['no'] + 1
-        # data['type'] = 'deposit'
-        # data['money'] = money
-        Id = 1
-        conn.execute('UPDATE account SET balance = ? WHERE id =?',(self.balance, Id))
-        conn.execute('INSERT INTO history (htype, money) VALUES(?,?)', (htype, money,))
+        deposit = Toplevel(root)
+        deposit.geometry('200x200')
+        lblText = Label(deposit, text='Your deposit money: ')
+        lblText.grid(row=0, column=0)
+        entry = Entry(deposit, textvariable=money)
+        entry.grid(row=0, column=1)
+        btnSubmit = Button(deposit, text='Submit', command=depositMoney)
+        btnSubmit.grid(row=1, column=0)
+
+
+
         # self.storage.append(data)
     def withdraw(self):
         money = input('Nhập số tiền bạn muốn rút:')
