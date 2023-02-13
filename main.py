@@ -15,34 +15,42 @@ class Ewallet:
         print(f'account name: {row[1]}')
         print(f'balance: {row[2]}')
     def addAccount(self):
-        conn.execute('INSERT INTO account values (?, ?, ?)', (1, self.account_name, self.balance,))
+        conn.execute('INSERT INTO account (account_name, balance) values (?,?) ', (self.account_name, self.balance,))
         conn.commit()
     def deposit(self):
         money = input('Nhập số bạn muốn nạp:')
-        self.balance = self.balance + int(money)
+        self.balance = self.balance + float(money)
         print(f'Balance: {self.balance}')
-        data = {'no':'', 'type': '', 'money':''}
-        if len(self.storage) == 0:
-            data['no'] = 1
-        else:
-            data['no'] = self.storage[-1]['no'] + 1
-        data['type'] = 'deposit'
-        data['money'] = money
-        conn.execute()
-        self.storage.append(data)
+        htype = "deposit"
+        # data = {'no':'', 'type': '', 'money':''}
+        # if len(self.storage) == 0:
+        #     data['no'] = 1
+        # else:
+        #     data['no'] = self.storage[-1]['no'] + 1
+        # data['type'] = 'deposit'
+        # data['money'] = money
+        Id = 1
+        conn.execute('UPDATE account SET balance = ? WHERE id =?',(self.balance, Id))
+        conn.execute('INSERT INTO history (htype, money) VALUES(?,?)', (htype, money,))
+        # self.storage.append(data)
     def withdraw(self):
         money = input('Nhập số tiền bạn muốn rút:')
         if self.balance > int(money):
             self.balance = self.balance - int(money)
             print(f'balance:{self.balance}')
-            data = {'no': '', 'type': '', 'money': ''}
-            if len(self.storage) == 0:
-                data['no'] = 1
-            else:
-                data['no'] = self.storage[-1]['no'] + 1
-            data['type'] = 'withdraw'
-            data['money'] = money
-            self.storage.append(data)
+            htype = 'withdraw'
+            Id = 1
+            conn.execute('UPDATE account set balance = ? WHERE id= ?',(self.balance, Id))
+            conn.execute('INSERT INTO history (htype, money) VALUES(?,?)',(htype, money))
+            # data = {'no': '', 'type': '', 'money': ''}
+            # if len(self.storage) == 0:
+            #     data['no'] = 1
+            # else:
+            #     data['no'] = self.storage[-1]['no'] + 1
+            # data['type'] = 'withdraw'
+            # data['money'] = money
+            # self.storage.append(data)
+
         else:
             print("Your balance doesn't have enough money to withdraw")
 
@@ -50,10 +58,12 @@ class Ewallet:
 
     def history(self):
         print(f'Your history transaction:')
-        for i in self.storage:
-            print(f"No.{i['no']} - {i['type']} - {i['money']}")
-        print(f'Balance: {self.balance}')
-createTable()
+        cur = conn.execute('SELECT * FROM history')
+        row = cur.fetchall()
+        for i in row:
+            print(i)
+
+# createTable()
 account1 = Ewallet('Than Duc Kien', 0)
 account1.addAccount()
 # account1.view()
