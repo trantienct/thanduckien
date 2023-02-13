@@ -14,15 +14,26 @@ class Ewallet:
         row = cur.fetchone()
         view = Toplevel(root)
         view.geometry('100x100')
-        lblAcountName = Label(view, text=self.account_name)
-        lblAcountName.grid(column=0, row=0)
+        lblAcountName = Label(view, text='account name:' + self.account_name)
+        lblAcountName.grid(column=0, row=0, sticky='w')
+        lblBalance = Label(view, text ="Balance: " + str(self.balance))
+        lblBalance.grid(column=0, row =1, sticky='w')
+
         view.mainloop()
     def addAccount(self):
         conn.execute('INSERT INTO account (account_name, balance) values (?,?) ', (self.account_name, self.balance,))
         conn.commit()
     def deposit(self):
-        money = input('Nhập số bạn muốn nạp:')
-        self.balance = self.balance + float(money)
+        money = ''
+        view = Toplevel(root)
+        view.geometry('100x100')
+        lblMoney = Label(view, text='Type money you want to deposit')
+        lblMoney.grid(column=0, row =0, sticky='w')
+        EntryMoney = Entry(view, textvariable=money)
+        EntryMoney.grid(column=1, row = 0, sticky='w')
+        btnSubmit = Button(view,  text = 'submit')
+        btnSubmit.grid(column=0, row =1, sticky='w')
+        # self.balance = self.balance + int(money)
         print(f'Balance: {self.balance}')
         htype = "deposit"
         # data = {'no':'', 'type': '', 'money':''}
