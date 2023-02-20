@@ -14,4 +14,11 @@ btnView.grid(column=0, row=1)
 btnDeposit = Button(root, text='Deposit', command=account1.deposit)
 btnDeposit.grid(column=1, row=1)
 
+btnWithdraw = Button(root, text='Withdraw', command=account1.withdraw)
+btnWithdraw.grid(column=2, row=1)
+
+btnHis = Button(root, text='History', command=account1.history())
+btnHis.grid(column=3, row=1)
+
+
 root.mainloop()

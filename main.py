@@ -1,5 +1,7 @@
 from db import *
 from tkinter import *
+from tkinter import messagebox
+from tkinter import ttk
 root = Tk()
 def printHello():
     print('Hello')
@@ -42,29 +44,38 @@ class Ewallet:
         btnSubmit = Button(deposit, text='Submit', command=depositMoney)
         btnSubmit.grid(row=1, column=0)
 
-
-
-        # self.storage.append(data)
     def withdraw(self):
-        money = input('Nhập số tiền bạn muốn rút:')
-        if self.balance > int(money):
-            self.balance = self.balance - int(money)
-            print(f'balance:{self.balance}')
+        def withdrawMoney():
             htype = 'withdraw'
-            Id = 1
-            conn.execute('UPDATE account set balance = ? WHERE id= ?',(self.balance, Id))
-            conn.execute('INSERT INTO history (htype, money) VALUES(?,?)',(htype, money))
-            # data = {'no': '', 'type': '', 'money': ''}
-            # if len(self.storage) == 0:
-            #     data['no'] = 1
-            # else:
-            #     data['no'] = self.storage[-1]['no'] + 1
-            # data['type'] = 'withdraw'
-            # data['money'] = money
-            # self.storage.append(data)
+            money = entry.get()
+            if self.balance > int(money):
+                self.balance = self.balance - int(money)
+                Id = 1
+                conn.execute('UPDATE account set balance = ? WHERE id= ?', (self.balance, Id))
+                conn.execute('INSERT INTO history (htype, money) VALUES(?,?)', (htype, money))
+                conn.commit()
+                withdraw.withdraw()
+                # data = {'no': '', 'type': '', 'money': ''}
+                # if len(self.storage) == 0:
+                #     data['no'] = 1
+                # else:
+                #     data['no'] = self.storage[-1]['no'] + 1
+                # data['type'] = 'withdraw'
+                # data['money'] = money
+                # self.storage.append(data)
 
-        else:
-            print("Your balance doesn't have enough money to withdraw")
+            else:
+                messagebox.showinfo('Error', 'You dont have enough money ')
+
+        money = ''
+        withdraw = Toplevel(root)
+        withdraw.geometry('200x200')
+        lblText = Label(withdraw, text = 'Your withdraw money: ')
+        lblText.grid(row = 0, column=0)
+        entry = Entry(withdraw, textvariable=money)
+        entry.grid(row=0, column=0)
+        btnSubmit = Button(withdraw, text='Submit', command=withdrawMoney)
+        btnSubmit.grid(row=1, column=0)
 
 
 
@@ -74,6 +85,24 @@ class Ewallet:
         row = cur.fetchall()
         for i in row:
             print(i)
+        his = Toplevel(root)
+        history = ttk.Treeview(his)
+        history['columns'] = ('id', 'type', 'money')
+        history.column('id', width=10)
+        history.column('type', width=40)
+        history.column('money', width=20)
+
+        history.heading('id', text = 'ID')
+        history.heading('type', text='type')
+        history.heading('money', text='money')
+        cur = conn.execute('SELECT * FROM history')
+        row = cur.fetchall()
+        for i in row:
+            history.insert(parent='', index=0, values= (i[0], i[1], i[2]))
+
+
+
+
 
 # createTable()
 
