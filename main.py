@@ -86,14 +86,17 @@ class Ewallet:
         for i in row:
             print(i)
         his = Toplevel(root)
-        his.title('History')
-        his.geometry('400x400')
-        history = ttk.Treeview(his, show = 'headings')
+        his.title('HISTORY')
+        his.geometry('500x500')
+        history = ttk.Treeview(his)
+        #Heading
+        #show=
+        #...
+        history.grid(column=0, row=0, columnspan=5)
         history['columns'] = ('id', 'type', 'money')
-        history.column('id', width=40)
+        history.column('id', width=10)
         history.column('type', width=40)
-        history.column('money', width=40)
-        history.grid(column=0,row=0)
+        history.column('money', width=20)
 
         history.heading('id', text = 'ID')
         history.heading('type', text='type')
@@ -103,7 +106,6 @@ class Ewallet:
         for i in row:
             history.insert(parent='', index=0, values= (i[0], i[1], i[2]))
         his.mainloop()
-
 
 
 
