@@ -102,45 +102,38 @@ class Ewallet:
             history.insert(parent='', index=0, values= (i[0], i[1], i[2]))
         his.mainloop()
     def interest(self):
+
+        month = IntVar()
+        interestPercent = IntVar()
+        totalMoney = StringVar()
         interest = Toplevel(root)
         interest.title('Interest Calculator')
         interest.geometry('400x400')
         def calculateInterest():
-            month = entryMonth.get()
-            interest = entryInterest.get()
-
-            total_money = (interest/100/12*month+1)*self.balance
-            return total_money
-
-
-        total_money = calculateInterest()
-
-
-
-
-
-
-
+            m = month.get()
+            i = interestPercent.get()
+            total_money = int((int(i)/100/12*int(m)+1)*self.balance)
+            totalMoney.set(total_money)
         lblAccount = Label(interest, text='Your account:')
         lblAccount.grid(column=0, row =0)
         lblAccount2 = Label(interest, text=self.balance)
         lblAccount2.grid(column=1,row=0)
         lblMonth = Label(interest, text='Month:')
         lblMonth.grid(column=0, row = 1)
-        entryMonth = Entry(interest)
+        entryMonth = Entry(interest, textvariable=month)
         entryMonth.grid(column=1, row = 1)
         lblInterest = Label(interest, text='Interest per year:')
         lblInterest.grid(column=0,row=2)
-        entryInterest = Entry(interest)
+        entryInterest = Entry(interest, textvariable=interestPercent)
         entryInterest.grid(column=1, row=2)
 
-        btnCalculate = Button(interest, command= calculateInterest)
+        btnCalculate = Button(interest, text='Calculate', command= calculateInterest)
         btnCalculate.grid(column=1, row =3)
 
         lblTotalMoney = Label(interest, text='Your money after 12 month is:')
         lblTotalMoney.grid(column=0, row =4)
 
-        lblTotalMoney2 = Label(interest, text= total_money)
+        lblTotalMoney2 = Label(interest, textvariable=totalMoney)
         lblTotalMoney2.grid(column=0, row = 5)
 
 
