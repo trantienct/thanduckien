@@ -17,7 +17,7 @@ btnDeposit.grid(column=1, row=1)
 btnWithdraw = Button(root, text='Withdraw', command=account1.withdraw)
 btnWithdraw.grid(column=2, row=1)
 
-btnHis = Button(root, text='History', command=account1.history())
+btnHis = Button(root, text='History', command=account1.history)
 btnHis.grid(column=3, row=1)
 
 
