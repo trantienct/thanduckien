@@ -20,5 +20,8 @@ btnWithdraw.grid(column=2, row=1)
 btnHis = Button(root, text='History', command=account1.history)
 btnHis.grid(column=3, row=1)
 
+btnInterestCalculate = Button(root, text = 'Interest', command=account1.interest)
+btnInterestCalculate.grid(column=4, row =1)
+
 
 root.mainloop()
