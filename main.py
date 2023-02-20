@@ -88,15 +88,15 @@ class Ewallet:
         his = Toplevel(root)
         his.title('HISTORY')
         his.geometry('500x500')
-        history = ttk.Treeview(his)
+        history = ttk.Treeview(his, show='headings')
         #Heading
         #show=
         #...
-        history.grid(column=0, row=0, columnspan=5)
+        history.grid(column=0, row=0)
         history['columns'] = ('id', 'type', 'money')
-        history.column('id', width=10)
-        history.column('type', width=40)
-        history.column('money', width=20)
+        history.column('id', width=100)
+        history.column('type', width=200)
+        history.column('money', width=200)
 
         history.heading('id', text = 'ID')
         history.heading('type', text='type')
