@@ -23,3 +23,4 @@ def createTable():
         ''')
 
     conn.commit()
+createTable()
