@@ -1,20 +1,10 @@
-#BTVN 13/02/2023
-#Hoan thien chuc nang GUI cho chuong trinh Ewallet
-# View():
-#   Label: Account Name
-# 		self.account_name
-#   Label: Balance
-# 		self.balance
-#
-# Deposit():
-# 	Label: Your deposit money
-# 	Entry: Money
-# 	Button: Deposit
-#           command = depositMoney
-# Withdraw():
-#       Label: Your withdraw money
-#       Entry: Money
-# 	Button: Withdraw
-# 	    command=withdraw
-# history():
-# 	Treeview
+#BTVN 20/02/2023
+
+# Lai suat se duoc cong don hang thang chung voi so tien hien tai
+
+# Them comboBox: Lai suat co dinh / Lai suat kep
+
+# Thuc hien tinh toan ket qua sau khi bam nut Calculate
+
+# Hien thi ket qua len man hinh
+
