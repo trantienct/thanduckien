@@ -120,7 +120,7 @@ class Ewallet:
         def calculateInterest2():
             m = month.get()
             i = interestPercent.get()
-            totalmoney = int((int(i) / 10 / 12 + 1)^month * self.balance)
+            totalmoney = int((i / 100 / 12 + 1)**m * self.balance)
             totalMoney.set(totalmoney)
         def chooseInterest():
             if interest_type.get() == 'fixed interest':

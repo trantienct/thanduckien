@@ -8,3 +8,4 @@
 
 # Hien thi ket qua len man hinh
 
+# học vào tối thứ 3 tuần sau
