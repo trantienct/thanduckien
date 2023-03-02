@@ -105,15 +105,30 @@ class Ewallet:
 
         month = IntVar()
         interestPercent = IntVar()
+        interest_type = StringVar()
         totalMoney = StringVar()
         interest = Toplevel(root)
         interest.title('Interest Calculator')
         interest.geometry('400x400')
+
         def calculateInterest():
             m = month.get()
             i = interestPercent.get()
-            total_money = int((int(i)/100/12*int(m)+1)*self.balance)
+            total_money = int((int(i) / 100 / 12 * int(m) + 1) * self.balance)
             totalMoney.set(total_money)
+
+        def calculateInterest2():
+            m = month.get()
+            i = interestPercent.get()
+            totalmoney = int((int(i) / 10 / 12 + 1)^month * self.balance)
+            totalMoney.set(totalmoney)
+        def chooseInterest():
+            if interest_type.get() == 'fixed interest':
+                calculateInterest()
+
+            else:
+                calculateInterest2()
+
         lblAccount = Label(interest, text='Your account:')
         lblAccount.grid(column=0, row =0)
         lblAccount2 = Label(interest, text=self.balance)
@@ -127,8 +142,12 @@ class Ewallet:
         entryInterest = Entry(interest, textvariable=interestPercent)
         entryInterest.grid(column=1, row=2)
 
-        btnCalculate = Button(interest, text='Calculate', command= calculateInterest)
+        btnCalculate = Button(interest, text='Calculate', command= chooseInterest)
         btnCalculate.grid(column=1, row =3)
+
+        comboType = ttk.Combobox(interest, textvariable= interest_type, font=("Calibri", 16), width=228, state="readonly")
+        comboType['values'] = ("fixed interest","compound interest")
+        comboType.grid(column=2, row = 3)
 
         lblTotalMoney = Label(interest, text='Your money after 12 month is:')
         lblTotalMoney.grid(column=0, row =4)
