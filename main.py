@@ -110,9 +110,13 @@ class Ewallet:
         interest.title('Interest Calculator')
         interest.geometry('400x400')
         def calculateInterest():
+            interestChoose = interest_value.get()
             m = month.get()
             i = interestPercent.get()
-            total_money = int((int(i)/100/12*int(m)+1)*self.balance)
+            if interestChoose == 0:
+                total_money = int((int(i)/100/12*int(m)+1)*self.balance)
+            if interestChoose == 1:
+                total_money = (int)(self.balance * (1 + ((i / 100) / 12)) ** m)
             totalMoney.set(total_money)
         lblAccount = Label(interest, text='Your account:')
         lblAccount.grid(column=0, row =0)
@@ -126,15 +130,19 @@ class Ewallet:
         lblInterest.grid(column=0,row=2)
         entryInterest = Entry(interest, textvariable=interestPercent)
         entryInterest.grid(column=1, row=2)
-
+        interest_value = IntVar()
+        chooseFixInterest = ttk.Radiobutton(interest, text='Fixed Interest', value='0', variable=interest_value)
+        chooseFixInterest.grid(column=0, row=3)
+        chooseCompoundInterest = ttk.Radiobutton(interest, text='Compound Interest', value='1', variable=interest_value)
+        chooseCompoundInterest.grid(column=1, row=3)
         btnCalculate = Button(interest, text='Calculate', command= calculateInterest)
-        btnCalculate.grid(column=1, row =3)
+        btnCalculate.grid(column=0, row=4, columnspan=2)
 
         lblTotalMoney = Label(interest, text='Your money after 12 month is:')
-        lblTotalMoney.grid(column=0, row =4)
+        lblTotalMoney.grid(column=0, row =5)
 
         lblTotalMoney2 = Label(interest, textvariable=totalMoney)
-        lblTotalMoney2.grid(column=0, row = 5)
+        lblTotalMoney2.grid(column=0, row = 6)
 
 
 # createTable()
