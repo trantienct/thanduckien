@@ -1,7 +1,7 @@
 from tkinter import *
 
 def loginPage(root):
-    acount = StringVar()
+    account = StringVar()
     password = StringVar()
     lblHeading = Label(root, text='Login Page', font='Arial 20')
     lblHeading.grid(row=0, column=0, columnspan=2, sticky='we', padx=10, pady=10)
