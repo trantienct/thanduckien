@@ -113,16 +113,19 @@ def loginPage(root):
     root.columnconfigure(3, weight=1)
     lblAccount = Label(root, text='Your Account', font='Arial 12')
     lblAccount.grid(row=1, column=0, pady=5)
-    txtAccount = Entry(root, font='Arial 16')
+    txtAccount = Entry(root, font='Arial 16', textvariable=account)
     txtAccount.grid(row=1, column=1, pady=5)
 
     lblPassword = Label(root, text='Your Password', font='Arial 12')
     lblPassword.grid(row=2, column=0, pady=5)
-    txtPassword = Entry(root, font='Arial 16')
+    txtPassword = Entry(root, font='Arial 16', textvariable=password)
     txtPassword.grid(row=2, column=1, pady=5)
 
-    btnCancel = Button(root, text='Cancel', font='Arial 10', width=10)
+    btnCancel = Button(root, text='Cancel', font='Arial 10', width=10, command=reset)
     btnCancel.grid(row=3, column=0)
 
-    btnLogin = Button(root, text='Login', font='Arial 10', width=10)
+    btnLogin = Button(root, text='Login', font='Arial 10', width=10, command=login)
     btnLogin.grid(row=3, column=1)
+
+    btnRegister = Button(root, text='Register', font='Arial 10', width=10, command=register)
+    btnRegister.grid(row=4, column=1)
