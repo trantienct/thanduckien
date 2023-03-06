@@ -7,7 +7,6 @@ conn = sqlite3.connect('Library_management.db')
 
 def loginPage(root):
     def login():
-        messagebox.showinfo('Login', f'user name: {account.get()}, password: {password.get()}')
         # messagebox.showinfo('Debug', name + '-' + password)
         if account.get() == '' or password.get() == '':
             messagebox.showinfo('Error', 'Username and Password is not empty')
@@ -26,13 +25,14 @@ def loginPage(root):
                           WHERE users.username =?
                           ''', (account.get(),))
                     role = getDataRole.fetchone()
-                    print(role)
                     if role[0] == 'Administrator':
-                        adminDashboard(root)
-                        root.withdraw(root)
-                    elif role[0] == 'Student':
-                        studentDashboard()
                         root.withdraw()
+                        adminDashboard(root, account.get())
+
+                    elif role[0] == 'Student':
+                        root.withdraw()
+                        studentDashboard()
+
 
 
                 else:
@@ -71,7 +71,7 @@ def loginPage(root):
                         print('Register successfully')
                         # print(row1)
                         register.destroy()
-                        root.deiconify
+                        root.deiconify()
 
 
         register = Toplevel(root)
@@ -106,7 +106,7 @@ def loginPage(root):
 
     lblPassword = Label(root, text='Your Password', font='Arial 12')
     lblPassword.grid(row=2, column=0, pady=5)
-    txtPassword = Entry(root, font='Arial 16', textvariable=password)
+    txtPassword = Entry(root, font='Arial 16', textvariable=password, show='*')
     txtPassword.grid(row=2, column=1, pady=5)
 
     btnCancel = Button(root, text='Cancel', font='Arial 10', width=10)
