@@ -18,14 +18,13 @@ def loginPage(root):
             else:
                 if row[3] == 1:
                     getDataRole = conn.execute('''
-                          SELECT roles.role_name FROM user_roles
+                          SELECT roles.role_name FROM roles
+                          LEFT JOIN user_roles ON user_roles.role_id = roles.id
                           LEFT JOIN users ON user_roles.user_id = users.id
-                          LEFT JOIN roles ON user_roles.role_id = roles.id
                           WHERE users.username =?
                           ''', (account.get(),))
                     role = getDataRole.fetchone()
                     print(role)
-                    print(account.get())
                     if role[0] == 'Administrator':
                         adminDashboard()
                         root.withdraw()

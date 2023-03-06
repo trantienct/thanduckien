@@ -1,4 +1,6 @@
 import sqlite3
+from DB import *
+createTable()
 conn = sqlite3.connect('Library_management.db')
 user_lists = [('admin', '123456789', 1), ('student', '123456789',1)]
 role_lists = [(1, 'Administrator'), (2, 'Student')]
