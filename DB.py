@@ -1,6 +1,6 @@
 import sqlite3
 
-def creatTable():
+def createTable():
 
     conn = sqlite3.connect('Library_management.db')
 
