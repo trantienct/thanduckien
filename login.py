@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 from DB import *
+from adminDashboard import *
+from studentDashboard import *
 conn = sqlite3.connect('Library_management.db')
 
 def loginPage(root):
@@ -26,15 +28,11 @@ def loginPage(root):
                     role = getDataRole.fetchone()
                     print(role)
                     if role[0] == 'Administrator':
-                        adminDashboard()
-                        root.withdraw()
+                        adminDashboard(root)
+                        root.withdraw(root)
                     elif role[0] == 'Student':
                         studentDashboard()
                         root.withdraw()
-                    else:
-                        messagebox.showinfo('Notice', 'Your role is not exists. Please contact Administrator')
-
-                    # messagebox.showinfo('Show Info', 'Login successfully')
 
 
                 else:
@@ -43,15 +41,6 @@ def loginPage(root):
     def reset():
         account.set('')
         password.set('')
-    def studentDashboard():
-        student = Toplevel(root)
-        student.title('Student Dashboard')
-        student.mainloop()
-    def adminDashboard():
-        admin = Toplevel(root)
-        admin.title('Admin Dashboard')
-        admin.mainloop()
-
     def register():
         def executeRegister():
             registerName = txtAcount.get()
@@ -100,21 +89,31 @@ def loginPage(root):
         txtRePassword.grid(row=2, column=1, padx=10)
         btnRegister = Button(register, text='Register', command=executeRegister)
         btnRegister.grid(row=3, column=0)
+
     account = StringVar()
     password = StringVar()
-    lblAccount = Label(root, text='Account')
-    lblAccount.grid(row=0, column=0)
-    txtAcount = Entry(root, textvariable=account)
-    txtAcount.grid(row=0, column=1)
-    lblPassword = Label(root, text='Password')
-    lblPassword.grid(row=1, column=0, padx=10)
-    txtPassword = Entry(root, textvariable=password, show='*')
-    txtPassword.grid(row=1, column=1, padx=10)
+    lblHeading = Label(root, text='Login Page', font='Arial 20')
+    lblHeading.grid(row=0, column=0, columnspan=2, sticky='we', padx=10, pady=10)
 
-    btnCancel = Button(root, text='Cancel', command=reset)
-    btnCancel.grid(row=2, column=0 )
-    btnLogin = Button(root, text='Login', command=login)
-    btnLogin.grid(row=2, column=1)
+    root.columnconfigure(0, weight=1)
+    root.columnconfigure(1, weight=1)
+    root.columnconfigure(2, weight=1)
+    root.columnconfigure(3, weight=1)
+    lblAccount = Label(root, text='Your Account', font='Arial 12')
+    lblAccount.grid(row=1, column=0, pady=5)
+    txtAccount = Entry(root, font='Arial 16', textvariable=account)
+    txtAccount.grid(row=1, column=1, pady=5)
 
-    btnRegister = Button(root, text='Register', command=register)
-    btnRegister.grid(row=3, column=0, columnspan=2)
+    lblPassword = Label(root, text='Your Password', font='Arial 12')
+    lblPassword.grid(row=2, column=0, pady=5)
+    txtPassword = Entry(root, font='Arial 16', textvariable=password)
+    txtPassword.grid(row=2, column=1, pady=5)
+
+    btnCancel = Button(root, text='Cancel', font='Arial 10', width=10)
+    btnCancel.grid(row=3, column=0)
+
+    btnLogin = Button(root, text='Login', font='Arial 10', command=login, width=10)
+    btnLogin.grid(row=3, column=1)
+
+    btnRegister = Button(root, text='Register', command=register, width=10)
+    btnRegister.grid(row=4, column=0, columnspan=2)
