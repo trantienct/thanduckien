@@ -1,12 +1,3 @@
-# Create tables: users, roles, user_roles, books, book_orders
-# Register an account:
-# - When password and retype password match:
-#    + Check if account is exists -> Show messagebox Account is exists
-#    + If not exists: insert new record to table users (status = 1)
-#    + insert role_id = 2, user_id (Student) to table user_roles
-#    + return to Login Page
-# If mismatch, show messagebox: pasword and retype-password must be match
-# Login :
-# Check:
-        # if Admin, show Blank Admin Toplevel
-        # if Student, show Blank Student Toplevel
+# BTVN 06032023
+# Tao Toplevel UserList: Treeview lay tat ca user trong DB, sap xep theo thu tu id giam dan order by id ASC | DESC
+# Edit User: Treeview tuong tu Userlist, Khi bam vao tung record, hien ra data <<bind>>
