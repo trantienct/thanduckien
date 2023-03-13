@@ -1,3 +1,2 @@
-# BTVN 06032023
-# Tao Toplevel UserList: Treeview lay tat ca user trong DB, sap xep theo thu tu id giam dan order by id ASC | DESC
-# Edit User: Treeview tuong tu Userlist, Khi bam vao tung record, hien ra data <<bind>>
+# BTVN 13032023
+# Thuc hien chuc nang Update User va load lai data vao TreeView
