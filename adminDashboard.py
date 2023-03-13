@@ -16,6 +16,7 @@ conn = sqlite3.connect('Library_management.db')
 
 
 def adminDashboard(root, user_name):
+
     def viewUserList():
         user_list = Toplevel(root)
         user_list.title('View user list')
@@ -38,6 +39,32 @@ def adminDashboard(root, user_name):
             count += 1
 
     def editUser():
+        def userInfo():
+            name = StringVar()
+            role = StringVar()
+            index = edit_user.focus()
+            selectValue = edit_user.item(index)
+            studentData = selectValue['values']
+            name.set(studentData[1])
+            role.set(studentData[2])
+
+            Info = Toplevel(root)
+            Info.title('User Info')
+            Info.geometry('400x400')
+            root.columnconfigure(1, weight=1)
+            root.columnconfigure(2, weight=1)
+            root.columnconfigure(3, weight=1)
+            lblUsername = Label(root, text='Username:', font='Arial 12')
+            lblUsername.grid(row=1, column=0, pady=5)
+            txtUsername = Entry(root, font='Arial 16')
+            txtUsername.grid(row=1, column=1, pady=5)
+
+            lblRole = Label(root, text='Role: ', font='Arial 12')
+            lblRole.grid(row=2, column=0, pady=5)
+            ComboRole = ttk.Combobox(root, font='Arial 16')
+            ComboRole['values'] = getRoleLists(conn)
+            ComboRole.grid(row=3, column=0, pady=5)
+
         edit = Toplevel(root)
         edit.title('View user list')
         edit.geometry('400x400')
@@ -47,7 +74,7 @@ def adminDashboard(root, user_name):
         edit_user.heading('username', text='Username')
         edit_user.heading('role', text='Role')
         edit_user.grid(column=0, row=0, sticky='nsew')
-        edit_user.bind("<ButtonRelease-1>", userInfo)
+        edit_user.bind("<ButtonRelease-1>",userInfo)
         cur = conn.execute('''SELECT users.id, users.username, roles.role_name 
                            FROM users
                            LEFT JOIN user_roles ON users.id = user_roles.user_id
@@ -59,24 +86,6 @@ def adminDashboard(root, user_name):
         for i in row:
             edit_user.insert('',END,values=(count, i[0], i[1], i[2]))
             count+=1
-    def userInfo():
-        Info = Toplevel(root)
-        Info.title('User Info')
-        Info.geometry('400x400')
-        root.columnconfigure(1, weight=1)
-        root.columnconfigure(2, weight=1)
-        root.columnconfigure(3, weight=1)
-        lblUsername = Label(root, text='Username:', font='Arial 12')
-        lblUsername.grid(row=1, column=0, pady=5)
-        txtUsername = Entry(root, font='Arial 16')
-        txtUsername.grid(row=1, column=1, pady=5)
-
-
-        lblRole = Label(root, text='Role: ', font='Arial 12')
-        lblRole.grid(row=2, column=0, pady=5)
-        ComboRole = ttk.Combobox(root, font='Arial 16')
-        ComboRole['values'] = getRoleLists(conn)
-        ComboRole.grid(row=3, column=0, pady = 5)
 
 
     admin = Toplevel(root)
