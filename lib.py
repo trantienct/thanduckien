@@ -11,7 +11,8 @@ def getRole(conn, username):
     return result
 def getRoleLists(conn):
     query = conn.execute('''
-        SELECT * FROM roles
+        SELECT role_name FROM roles
     ''')
     result = query.fetchall()
-    return result
+    final_result = [i[0] for i in result]
+    return final_result

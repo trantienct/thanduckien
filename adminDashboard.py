@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import sqlite3
-
+from lib import *
 conn = sqlite3.connect('Library_management.db')
 # User Management
 ## View User List
@@ -47,7 +47,7 @@ def adminDashboard(root, user_name):
         edit_user.heading('username', text='Username')
         edit_user.heading('role', text='Role')
         edit_user.grid(column=0, row=0, sticky='nsew')
-        edit_user.bind("<ButtonRelease-1>")
+        edit_user.bind("<ButtonRelease-1>", userInfo)
         cur = conn.execute('''SELECT users.id, users.username, roles.role_name 
                            FROM users
                            LEFT JOIN user_roles ON users.id = user_roles.user_id
@@ -68,16 +68,15 @@ def adminDashboard(root, user_name):
         root.columnconfigure(3, weight=1)
         lblUsername = Label(root, text='Username:', font='Arial 12')
         lblUsername.grid(row=1, column=0, pady=5)
-        txtUsername = Entry(root, font='Arial 16', textvariable=)
+        txtUsername = Entry(root, font='Arial 16')
         txtUsername.grid(row=1, column=1, pady=5)
+
 
         lblRole = Label(root, text='Role: ', font='Arial 12')
         lblRole.grid(row=2, column=0, pady=5)
-        ComboRole = ttk.Combobox(root, font='Arial 16', textvariable=,)
-        ComboRole['values'] = ['Admi']
-
-        btnCancel = Button(root, text='Cancel', font='Arial 10', width=10)
-        btnCancel.grid(row=3, column=0)
+        ComboRole = ttk.Combobox(root, font='Arial 16')
+        ComboRole['values'] = getRoleLists(conn)
+        ComboRole.grid(row=3, column=0, pady = 5)
 
 
     admin = Toplevel(root)
