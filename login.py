@@ -42,6 +42,13 @@ def loginPage(root):
         account.set('')
         password.set('')
     def register():
+        getDataRole = conn.execute('''
+                                  SELECT roles.role_name FROM roles
+                                  LEFT JOIN user_roles ON user_roles.role_id = roles.id
+                                  LEFT JOIN users ON user_roles.user_id = users.id
+                                  WHERE users.username =?
+                                  ''', (account.get(),))
+        role = getDataRole.fetchone()
         def executeRegister():
             registerName = txtAcount.get()
             registerPass = txtPassword.get()
