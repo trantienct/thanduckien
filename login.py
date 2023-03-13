@@ -3,11 +3,11 @@ from tkinter import messagebox
 from DB import *
 from adminDashboard import *
 from studentDashboard import *
+from lib import *
 conn = sqlite3.connect('Library_management.db')
 
 def loginPage(root):
     def login():
-        # messagebox.showinfo('Debug', name + '-' + password)
         if account.get() == '' or password.get() == '':
             messagebox.showinfo('Error', 'Username and Password is not empty')
         else:
@@ -15,26 +15,16 @@ def loginPage(root):
             row = cur.fetchone()
             print(row)
             if row is None:
-                print("This account is not exist")
+                messagebox.showinfo("Account Not Found", "This account is not exist")
             else:
                 if row[3] == 1:
-                    getDataRole = conn.execute('''
-                          SELECT roles.role_name FROM roles
-                          LEFT JOIN user_roles ON user_roles.role_id = roles.id
-                          LEFT JOIN users ON user_roles.user_id = users.id
-                          WHERE users.username =?
-                          ''', (account.get(),))
-                    role = getDataRole.fetchone()
+                    role = getRole(conn, account.get())
                     if role[0] == 'Administrator':
                         root.withdraw()
                         adminDashboard(root, account.get())
-
                     elif role[0] == 'Student':
                         root.withdraw()
                         studentDashboard()
-
-
-
                 else:
                     messagebox.showinfo('Error', 'Your account is inactive')
 
@@ -65,14 +55,10 @@ def loginPage(root):
                         user_id = cur1.lastrowid
                         role_id = 2
                         cur2 = conn.execute('INSERT INTO user_roles(user_id, role_id) VALUES(?,?)', (user_id, role_id))
-
-
                         conn.commit()
                         print('Register successfully')
-                        # print(row1)
                         register.destroy()
                         root.deiconify()
-
 
         register = Toplevel(root)
         lblAccount = Label(register, text='Account')
