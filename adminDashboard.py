@@ -20,7 +20,7 @@ def adminDashboard(root, user_name):
     def viewUserList():
         user_list = Toplevel(root)
         user_list.title('View user list')
-        user_list.geometry('400x400')
+        user_list.geometry('600x400')
         columns = ('id', 'username', 'role')
         view_user = ttk.Treeview(user_list, columns=columns,show='headings')
         view_user.heading('id', text='ID')
@@ -41,7 +41,6 @@ def adminDashboard(root, user_name):
     def editUser():
         def loadTable(treeView,data):
             treeView.delete(*treeView.get_children())
-            print(data)
             for i in data:
                 treeView.insert('', END, values=(i[0], i[1], i[2]))
         def userInfo(event):
@@ -70,21 +69,19 @@ def adminDashboard(root, user_name):
             ComboRole['values'] = getRoleLists(conn)
             ComboRole.grid(row=3, column=0, pady=5)
             def setData():
-                username = studentData[1]
-                cur = conn.execute('SELECT id FROM users WHERE username = ?',(username,))
-                row = cur.fetchone()
+                user_id = studentData[0]
                 new_username = txtUsername.get()
                 new_role = ComboRole.get()
-                conn.execute('UPDATE users SET username = ? WHERE id = ?',(new_username, row[0]))
-                cur2 = conn.execute('SELECT id FROM WHERE role_name =?',(new_role,))
+                conn.execute('UPDATE users SET username = ? WHERE id = ?', (new_username, user_id))
+                cur2 = conn.execute('SELECT id FROM roles WHERE role_name =?', (new_role,))
                 role_id = cur2.fetchone()
-                conn.execute('UPDATE user_roles SET role_id=? WHERE user_id=?',(role_id,row[0]))
+                conn.execute('UPDATE user_roles SET role_id= ? WHERE user_id= ? ', (role_id[0], user_id))
                 conn.commit()
                 cur3 = conn.execute('''
                             SELECT users.id,users.username, roles.role_name FROM users
                             LEFT JOIN user_roles ON users.id = user_roles.user_id
                             LEFT JOIN roles ON user_roles.role_id = roles.id
-                            WHERE roles.role_name ="Student" ''')
+                             ''')
                 result = cur3.fetchall()
                 loadTable(edit_user, result)
                 Info.destroy()
@@ -108,13 +105,11 @@ def adminDashboard(root, user_name):
                            FROM users
                            LEFT JOIN user_roles ON users.id = user_roles.user_id
                            LEFT JOIN roles ON user_roles.role_id = roles.id
-                           WHERE roles.id = 2''')
+                           ORDER BY users.id ASC ''')
 
         row = cur.fetchall()
-        count = 1
         for i in row:
-            edit_user.insert('',END,values=(count, i[0], i[1], i[2]))
-            count+=1
+            edit_user.insert('',END,values=(i[0], i[1], i[2]))
 
 
     admin = Toplevel(root)

@@ -13,7 +13,6 @@ def loginPage(root):
         else:
             cur = conn.execute('SELECT * FROM users WHERE username =? and password =?', (account.get(), password.get(),))
             row = cur.fetchone()
-            print(row)
             if row is None:
                 messagebox.showinfo("Account Not Found", "This account is not exist")
             else:
