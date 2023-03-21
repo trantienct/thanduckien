@@ -31,7 +31,7 @@ def adminDashboard(root, user_name):
                            FROM users
                            LEFT JOIN user_roles ON users.id = user_roles.user_id
                            LEFT JOIN roles ON user_roles.role_id = roles.id
-                           WHERE roles.id = 2 ORDER BY ASC''')
+                           WHERE roles.id = 2 ''')
         row = cur.fetchall()
         count = 1
         for i in row:
@@ -39,7 +39,12 @@ def adminDashboard(root, user_name):
             count += 1
 
     def editUser():
-        def userInfo():
+        def loadTable(treeView,data):
+            treeView.delete(*treeView.get_children())
+            print(data)
+            for i in data:
+                treeView.insert('', END, values=(i[0], i[1], i[2]))
+        def userInfo(event):
             name = StringVar()
             role = StringVar()
             index = edit_user.focus()
@@ -51,19 +56,43 @@ def adminDashboard(root, user_name):
             Info = Toplevel(root)
             Info.title('User Info')
             Info.geometry('400x400')
-            root.columnconfigure(1, weight=1)
-            root.columnconfigure(2, weight=1)
-            root.columnconfigure(3, weight=1)
-            lblUsername = Label(root, text='Username:', font='Arial 12')
+            Info.columnconfigure(1, weight=1)
+            Info.columnconfigure(2, weight=1)
+            Info.columnconfigure(3, weight=1)
+            lblUsername = Label(Info, text='Username:', font='Arial 12')
             lblUsername.grid(row=1, column=0, pady=5)
-            txtUsername = Entry(root, font='Arial 16')
+            txtUsername = Entry(Info, font='Arial 16', textvariable=name)
             txtUsername.grid(row=1, column=1, pady=5)
 
-            lblRole = Label(root, text='Role: ', font='Arial 12')
+            lblRole = Label(Info, text='Role: ', font='Arial 12')
             lblRole.grid(row=2, column=0, pady=5)
-            ComboRole = ttk.Combobox(root, font='Arial 16')
+            ComboRole = ttk.Combobox(Info, font='Arial 16', textvariable=role)
             ComboRole['values'] = getRoleLists(conn)
             ComboRole.grid(row=3, column=0, pady=5)
+            def setData():
+                username = studentData[1]
+                cur = conn.execute('SELECT id FROM users WHERE username = ?',(username,))
+                row = cur.fetchone()
+                new_username = txtUsername.get()
+                new_role = ComboRole.get()
+                conn.execute('UPDATE users SET username = ? WHERE id = ?',(new_username, row[0]))
+                cur2 = conn.execute('SELECT id FROM WHERE role_name =?',(new_role,))
+                role_id = cur2.fetchone()
+                conn.execute('UPDATE user_roles SET role_id=? WHERE user_id=?',(role_id,row[0]))
+                conn.commit()
+                cur3 = conn.execute('''
+                            SELECT users.id,users.username, roles.role_name FROM users
+                            LEFT JOIN user_roles ON users.id = user_roles.user_id
+                            LEFT JOIN roles ON user_roles.role_id = roles.id
+                            WHERE roles.role_name ="Student" ''')
+                result = cur3.fetchall()
+                loadTable(edit_user, result)
+                Info.destroy()
+
+            btnUpdate = Button(Info, text = 'Update', command=setData)
+            btnUpdate.grid(row = 4, column=0, pady=5)
+            Info.mainloop()
+
 
         edit = Toplevel(root)
         edit.title('View user list')
@@ -79,7 +108,7 @@ def adminDashboard(root, user_name):
                            FROM users
                            LEFT JOIN user_roles ON users.id = user_roles.user_id
                            LEFT JOIN roles ON user_roles.role_id = roles.id
-                           WHERE roles.id = 2 ORDER BY ASC''')
+                           WHERE roles.id = 2''')
 
         row = cur.fetchall()
         count = 1

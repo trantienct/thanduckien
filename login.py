@@ -102,7 +102,7 @@ def loginPage(root):
     txtPassword = Entry(root, font='Arial 16', textvariable=password, show='*')
     txtPassword.grid(row=2, column=1, pady=5)
 
-    btnCancel = Button(root, text='Cancel', font='Arial 10', width=10)
+    btnCancel = Button(root, text='Cancel', font='Arial 10', width=10, command=reset)
     btnCancel.grid(row=3, column=0)
 
     btnLogin = Button(root, text='Login', font='Arial 10', command=login, width=10)
