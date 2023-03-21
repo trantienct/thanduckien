@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import sqlite3
 from lib import *
 conn = sqlite3.connect('Library_management.db')
@@ -33,10 +34,46 @@ def adminDashboard(root, user_name):
                            LEFT JOIN roles ON user_roles.role_id = roles.id
                            WHERE roles.id = 2 ''')
         row = cur.fetchall()
-        count = 1
         for i in row:
-            view_user.insert('', END, values=(count, i[0], i[1], i[2]))
-            count += 1
+            view_user.insert('', END, values=(i[0], i[1], i[2]))
+
+    def addUser():
+        add_user = Toplevel(root)
+        add_user.geometry('400x400')
+        add_user.title('Add new user')
+        lblAccount = Label(add_user, text='Account')
+        lblAccount.grid(row=0, column=0)
+        txtAcount = Entry(add_user)
+        txtAcount.grid(row=0, column=1)
+        lblPassword = Label(add_user, text='Password')
+        lblPassword.grid(row=1, column=0, padx=10)
+        txtPassword = Entry(add_user, show='*')
+        txtPassword.grid(row=1, column=1, padx=10)
+        ComboRole = ttk.Combobox(add_user, font='Arial 16')
+        ComboRole['values'] = getRoleLists(conn)
+        ComboRole.grid(row=2, column=0, pady=5)
+
+        def executeAdd():
+            registerName = txtAcount.get()
+            registerPass = txtPassword.get()
+            role = ComboRole.get()
+            cur2 = conn.execute('SELECT id FROM roles WHERE role_name =?', (role,))
+            role_id = cur2.fetchone()
+            print(registerName)
+            if registerName == '' or registerPass == '':
+                messagebox.showinfo('Error', 'Username and Password is not empty')
+            else:
+                result = addNewUser(conn, registerName, registerPass, role_id[0])
+                print(result)
+                if result == False:
+                    messagebox.showinfo('Error', 'Username is exist')
+                else:
+                    print('Register successfully')
+                    add_user.destroy()
+                    root.deiconify()
+        btnAdd = Button(add_user, text='Create', command=executeAdd)
+        btnAdd.grid(row=3, column=0)
+
 
     def editUser():
         def loadTable(treeView,data):
@@ -127,6 +164,8 @@ def adminDashboard(root, user_name):
     btnUpdate_User.grid(row=3, column=0, padx=10)
     btnDelete_User = Button(admin, text='Delete User ', font='Arial 12')
     btnDelete_User.grid(row=4, column=0, padx=10)
+    btnAdd_User = Button(admin, text='Add user ', font='Arial 12', command = addUser)
+    btnAdd_User.grid(row=5, column=0, padx=10)
 
 
     lblBookManagement = Label(admin, text='Book Management ', font='Arial 12')

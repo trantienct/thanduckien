@@ -46,25 +46,13 @@ def loginPage(root):
             if registerName == '' or registerPass == '':
                 messagebox.showinfo('Error', 'Username and Password is not empty')
             else:
-                cur = conn.execute('SELECT * FROM users WHERE username =?', (registerName,))
-                row = cur.fetchall()
-                if len(row) > 0:
+                result = addNewUser(conn, registerName, registerPass,2)
+                if result == False:
                     messagebox.showinfo('Error', 'Username is exist')
                 else:
-                    print('A')
-                    if registerPass != registerRetypePass:
-                        messagebox.showinfo('Error', 'Password and Password Retype is mismatch')
-                    else:
-                        # insert to DB
-                        cur1 = conn.execute('INSERT INTO users (username,password, status) VALUES (?,?,?)',
-                                            (registerName, registerPass, status))
-                        user_id = cur1.lastrowid
-                        role_id = 2
-                        cur2 = conn.execute('INSERT INTO user_roles(user_id, role_id) VALUES(?,?)', (user_id, role_id))
-                        conn.commit()
-                        print('Register successfully')
-                        register.destroy()
-                        root.deiconify()
+                    print('Register successfully')
+                    register.destroy()
+                    root.deiconify()
 
         register = Toplevel(root)
         lblAccount = Label(register, text='Account')

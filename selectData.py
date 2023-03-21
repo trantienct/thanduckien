@@ -4,6 +4,7 @@ conn = sqlite3.connect('Library_management.db')
 
 cur = conn.execute('SELECT * FROM users')
 row = cur.fetchall()
+print(row)
 cur1 = conn.execute('SELECT * FROM user_roles')
 row1 = cur1.fetchall()
 #
