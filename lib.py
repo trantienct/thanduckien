@@ -1,4 +1,5 @@
 import sqlite3
+from tkinter import messagebox
 conn = sqlite3.connect('Library_management.db')
 def getRole(conn, username):
     query = conn.execute('''
@@ -31,6 +32,23 @@ def addNewUser(conn, userName, password, role_id):
 
     else:
         return False
+
+def validateData(username, password, role):
+    if username == '' or password == '':
+        messagebox.showinfo('Error', 'Username and Password is not empty')
+    else:
+        if len(username) <3 or len(username) or len(password) <3 or len(password) >10:
+            messagebox.showinfo("Error")
+        else:
+            if password.count('@') == 0:
+                messagebox.showinfo('Error')
+            else:
+                if role == '':
+                    messagebox.showinfo('Error', 'You need choose role')
+                else:
+                    messagebox.showinfo('Insert successfully')
+
+
 
 
 
