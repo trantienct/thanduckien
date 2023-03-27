@@ -1,9 +1,7 @@
-# BTVN 21032023
-# Thiet ke function validateData cho Add user form
-# Kiểm tra các trường hợp sau trước khi insert
-# TH1: Username và password chưa được nhập
-# TH2: Username có số ký tự nhỏ hơn 3 hoặc lớn hơn 10
-# TH3: Password có số ký tự nhỏ hơn 3 hoặc lớn hơn 10
-# TH4: Password không có ký tự @
-# TH5: Role chưa được chọn
-# HIển thị message tương ứng từng trường hợp
+#BTVN 27/3/2023
+#BT1: Làm lại form Add User
+#Kiểm tra dữ liệu khi Administrator tạo người dùng mới
+# - Username: Không rỗng, tối đa 30 ký tự, không có các ký tự đặc biệt như @, #, $, %
+# - Password: Không rỗng, tối thiểu 8 ký tự, không có các ký tự đặc biệt như @, #, $, %
+# - Role: Không rỗng
+# - Khi kiểm tra trong DB, username phải chưa tồn tại
