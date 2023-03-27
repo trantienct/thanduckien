@@ -21,8 +21,7 @@ def getRoleLists(conn):
 def addNewUser(conn, userName, password, role_id):
     checkUsser = conn.execute('''
         SELECT * FROM users WHERE username =?''',(userName,))
-    result = checkUsser.fetchone()
-    print(result)
+    result = checkUsser.fetchall()
     if len(result) == 0:
         cur1 = conn.execute('INSERT INTO users (username, password, status) VALUES(?,?,?)', (userName, password, 1))
         user_id = cur1.lastrowid
