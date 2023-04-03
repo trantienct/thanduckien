@@ -1,4 +1,5 @@
 import sqlite3
+from tkinter import messagebox
 conn = sqlite3.connect('Library_management.db')
 def getRole(conn, username):
     query = conn.execute('''
@@ -30,6 +31,42 @@ def addNewUser(conn, userName, password, role_id):
 
     else:
         return False
+
+def validateData(username, password):
+    result = {'status': '', 'username': '', 'password': ''}
+    if username == '':
+        result['status'] = False
+        if result['username'] == '':
+            result['username'] = 'You must type username'
+    if len(username) < 3 or len(username) > 30:
+        result['status'] = False
+        if result['username'] == '':
+            result['username'] = 'Username must greater than 3 or less than 10'
+    if username.count('@') >0 or username.count('%') >0 or username.count('$') >0 or username.count('#') >0:
+        result['status'] = False
+        if result['username'] == '':
+            result['username'] = "Username mustn't have symbols like '@,!,%,$'"
+
+
+    if password == '':
+        result['status'] = False
+        if result['password'] == '':
+            result['password'] = 'You must type password'
+        return result
+
+    if len(password) < 8 or len(password) > 30:
+        result['status'] = False
+        if result['password'] == '':
+            result['password'] = 'Password must greater than 8 or less than 30'
+        return result
+    if password.count('@') <1 or password.count('%') < 1  or password.count('$') <1 or password.coun('#') <1:
+        result['status'] = False
+        if result['password'] == '':
+            result['password'] = "Password must have symbols like '@,!,%,$'"
+
+    return result
+
+
 
 
 

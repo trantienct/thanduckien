@@ -38,20 +38,28 @@ def adminDashboard(root, user_name):
             view_user.insert('', END, values=(i[0], i[1], i[2]))
 
     def addUser():
+        error_username = StringVar()
+        error_password = StringVar()
         add_user = Toplevel(root)
         add_user.geometry('400x400')
         add_user.title('Add new user')
-        lblAccount = Label(add_user, text='Account')
-        lblAccount.grid(row=0, column=0)
-        txtAcount = Entry(add_user)
+        lblAccount = Label(add_user, text='Account',font =15)
+        lblAccount.grid(row=0, column=0, padx=15)
+        txtAcount = Entry(add_user, font=15)
         txtAcount.grid(row=0, column=1)
-        lblPassword = Label(add_user, text='Password')
-        lblPassword.grid(row=1, column=0, padx=10)
-        txtPassword = Entry(add_user, show='*')
-        txtPassword.grid(row=1, column=1, padx=10)
+        lblerrorAccount = Label(add_user, textvariable=error_username)
+        lblerrorAccount.grid(row=1, column=1)
+        lblPassword = Label(add_user, text='Password',font=15)
+        lblPassword.grid(row=2, column=0, padx=15)
+        txtPassword = Entry(add_user, show='*', font=15)
+        txtPassword.grid(row=2, column=1, padx=10, pady=5)
+        lblerrorPassword = Label(add_user, textvariable=error_password )
+        lblerrorPassword.grid(row=3, column=1)
+        lblRole = Label(add_user, text = 'Role:', font=15)
+        lblRole.grid(row=4, column=0, padx=15)
         ComboRole = ttk.Combobox(add_user, font='Arial 16')
         ComboRole['values'] = getRoleLists(conn)
-        ComboRole.grid(row=2, column=0, pady=5)
+        ComboRole.grid(row=4, column=1, pady=5)
 
         def executeAdd():
             registerName = txtAcount.get()
@@ -60,19 +68,18 @@ def adminDashboard(root, user_name):
             cur2 = conn.execute('SELECT id FROM roles WHERE role_name =?', (role,))
             role_id = cur2.fetchone()
             print(registerName)
-            if registerName == '' or registerPass == '':
-                messagebox.showinfo('Error', 'Username and Password is not empty')
+            check_user = validateData(registerName,registerPass)
+            if check_user['status'] == False:
+                error_username.set(check_user['username'])
+                error_password.set(check_user['password'])
             else:
-                result = addNewUser(conn, registerName, registerPass, role_id[0])
-                print(result)
-                if result == False:
-                    messagebox.showinfo('Error', 'Username is exist')
-                else:
-                    print('Register successfully')
-                    add_user.destroy()
-                    root.deiconify()
+                error_password.set('')
+                error_username.set('')
+                new_user = addNewUser(conn, registerName, registerPass, role_id[0])
         btnAdd = Button(add_user, text='Create', command=executeAdd)
-        btnAdd.grid(row=3, column=0)
+        btnAdd.grid(row=5, column=0)
+        btnBack = Button(add_user, text ='Back')
+        btnBack.grid(row=5, column=1)
 
 
     def editUser():
