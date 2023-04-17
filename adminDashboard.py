@@ -155,7 +155,8 @@ def adminDashboard(root, user_name):
         for i in row:
             edit_user.insert('',END,values=(i[0], i[1], i[2]))
 
-
+    def addBook():
+        pass
     admin = Toplevel(root)
     admin.columnconfigure(0, weight=1)
     admin.columnconfigure(1, weight=1)
@@ -177,4 +178,6 @@ def adminDashboard(root, user_name):
 
     lblBookManagement = Label(admin, text='Book Management ', font='Arial 12')
     lblBookManagement.grid(row=1, column=1, padx=10)
+    btnAddBook = Button(admin, text='Add a book', font='Arial 12', command=addBook)
+    btnAddBook.grid(row=2, column=1, padx=10)
     admin.mainloop()
