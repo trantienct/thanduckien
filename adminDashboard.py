@@ -68,7 +68,7 @@ def adminDashboard(root, user_name):
             cur2 = conn.execute('SELECT id FROM roles WHERE role_name =?', (role,))
             role_id = cur2.fetchone()
             print(registerName)
-            check_user = validateData(registerName,registerPass)
+            check_user = validateUser(registerName,registerPass)
             if check_user['status'] == False:
                 error_username.set(check_user['username'])
                 error_password.set(check_user['password'])
@@ -156,7 +156,60 @@ def adminDashboard(root, user_name):
             edit_user.insert('',END,values=(i[0], i[1], i[2]))
 
     def addBook():
-        pass
+        addBook = Toplevel(root)
+        addBook.geometry('400x600')
+        account = StringVar()
+        password = StringVar()
+        addBook.title('Add New Book')
+        lblHeading = Label(addBook, text='Add new book', font='Arial 20')
+        lblHeading.grid(row=0, column=0, columnspan=2, sticky='we', padx=10, pady=10)
+
+        root.columnconfigure(0, weight=1)
+        root.columnconfigure(1, weight=1)
+        root.columnconfigure(2, weight=1)
+        root.columnconfigure(3, weight=1)
+        root.columnconfigure(4, weight=1)
+        root.columnconfigure(5, weight=1)
+        root.columnconfigure(6, weight=1)
+        lblTitle = Label(addBook, text='Title', font='Arial 12')
+        lblTitle.grid(row=1, column=0, pady=5)
+        txtTitle = Entry(addBook, font='Arial 16', textvariable=account)
+        txtTitle.grid(row=1, column=1, pady=5)
+
+        lblAuthor = Label(addBook, text='Author', font='Arial 12')
+        lblAuthor.grid(row=2, column=0, pady=5)
+        txtAuthor = Entry(addBook, font='Arial 16')
+        txtAuthor.grid(row=2, column=1, pady=5)
+
+        lblCategory = Label(addBook, text='Category', font='Arial 12')
+        lblCategory.grid(row=3, column=0, pady=5)
+        txtCategory = ttk.Combobox(addBook, font='Arial 14')
+        txtCategory['values'] = ('Math', 'English')
+        txtCategory.grid(row=3, column=1, pady=5)
+
+        lblLanguague = Label(addBook, text='Languages', font='Arial 12')
+        lblLanguague.grid(row=4, column=0, pady=5)
+        txtLanguague = ttk.Combobox(addBook, font='Arial 14')
+        txtLanguague['values'] = ('Vietnamese', 'English', 'French')
+        txtLanguague.grid(row=4, column=1, pady=5)
+
+        lblPage = Label(addBook, text='Page', font='Arial 12')
+        lblPage.grid(row=5, column=0, pady=5)
+        txtPage = Entry(addBook, font='Arial 16')
+        txtPage.grid(row=5, column=1, pady=5)
+
+        lblInsertDate = Label(addBook, text='Insert Date', font='Arial 12')
+        lblInsertDate.grid(row=5, column=0, pady=5)
+        txtInsertDate = Entry(addBook, font='Arial 16')
+        txtInsertDate.grid(row=5, column=1, pady=5)
+
+        lblPosition = Label(addBook, text='Position', font='Arial 12')
+        lblPosition.grid(row=6, column=0, pady=5)
+        txtPosition = Entry(addBook, font='Arial 16')
+        txtPosition.grid(row=6, column=1, pady=5)
+
+        btnLogin = Button(addBook, text='Add', font='Arial 10', width=15)
+        btnLogin.grid(row=7, column=1, columnspan=2, sticky='we')
     admin = Toplevel(root)
     admin.columnconfigure(0, weight=1)
     admin.columnconfigure(1, weight=1)
