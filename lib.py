@@ -1,5 +1,7 @@
 import sqlite3
 from tkinter import messagebox
+import re
+from datetime import datetime
 conn = sqlite3.connect('Library_management.db')
 def getRole(conn, username):
     query = conn.execute('''
@@ -32,39 +34,54 @@ def addNewUser(conn, userName, password, role_id):
     else:
         return False
 
-def validateData(username, password):
+def validateUser(username, password):
     result = {'status': '', 'username': '', 'password': ''}
-    if username == '':
-        result['status'] = False
-        if result['username'] == '':
-            result['username'] = 'You must type username'
-    if len(username) < 3 or len(username) > 30:
-        result['status'] = False
-        if result['username'] == '':
-            result['username'] = 'Username must greater than 3 or less than 10'
-    if username.count('@') >0 or username.count('%') >0 or username.count('$') >0 or username.count('#') >0:
-        result['status'] = False
-        if result['username'] == '':
-            result['username'] = "Username mustn't have symbols like '@,!,%,$'"
+    check_password = re.search('[0-9][A-Z][!@#$%^&*()+]', password)
+    check_username = re.search('[A-Z][a-z]', username)
 
-
-    if password == '':
+    result['status'] = True
+    if check_password is None:
+        result['password'] = 'Your password must be more special'
         result['status'] = False
-        if result['password'] == '':
-            result['password'] = 'You must type password'
-        return result
 
-    if len(password) < 8 or len(password) > 30:
+    if check_username is None:
+        result['username'] = 'Your username must be more special'
         result['status'] = False
-        if result['password'] == '':
-            result['password'] = 'Password must greater than 8 or less than 30'
-        return result
-    if password.count('@') <1 or password.count('%') < 1  or password.count('$') <1 or password.coun('#') <1:
-        result['status'] = False
-        if result['password'] == '':
-            result['password'] = "Password must have symbols like '@,!,%,$'"
-
     return result
+
+def validateBook(title, author, category, languages, insert_date):
+    result = {'status': '', 'title': '', 'author': '', 'category':'', 'languages':'', 'insert_date':''}
+    current_time = datetime.now().date()
+    insert_date_format = datetime.strptime(insert_date, '%d/%m/$Y').date()
+    if len(title) >= 50:
+        result['title'] = "Your title can't be more than 50 charaters"
+        result['status'] = False
+    check_author = re.search('[A-Z][a-z]', author)
+    check_category = re.search('[A-Z][a-z]', category)
+    check_languages = re.search('[A-Z][a-z]', languages)
+    result['status'] = True
+    if check_author is None:
+        result['author'] = "Author's name can't be null"
+        result['status'] = False
+
+    if check_category is None:
+        result['category'] = "Category can't be null"
+        result['status'] = False
+
+    if check_languages is None:
+        result['languages'] = "languages can't be null"
+        result['status'] = False
+    if insert_date_format > current_time:
+        result['insert_date'] = ["Your insert date can't be bigger than current date"]
+        result['status'] = False
+
+
+
+
+
+
+
+
 
 
 

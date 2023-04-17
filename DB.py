@@ -44,11 +44,13 @@ def createTable():
         book_id INTEGER PRIMARY KEY AUTOINCREMENT,
         book_name TEXT
         book_author TEXT
-        book_type TEXT
         book_language TEXT
-        book_position
-        book_year
-        status);''')
+        book_category_id INTEGER
+        book_position TEXT
+        insert_date TEXT
+        status TEXT);''')
+
+
 
     conn.execute('DROP TABLE IF EXISTS book_orders ')
     conn.execute('''
@@ -61,5 +63,15 @@ def createTable():
         return_date TEXT
         );
         ''')
+
+    conn.execute('DROP TABLE IF EXISTS category')
+    conn.execute('''
+                CREATE TABLE category
+                (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                category_name TEXT
+                );
+            ''')
+
     conn.commit()
     conn.close()
