@@ -158,8 +158,8 @@ def adminDashboard(root, user_name):
     def addBook():
         addBook = Toplevel(root)
         addBook.geometry('400x600')
-        account = StringVar()
-        password = StringVar()
+        cur = conn.execute('SELECT category_name FROM category')
+        category = cur.fetchall()
         addBook.title('Add New Book')
         lblHeading = Label(addBook, text='Add new book', font='Arial 20')
         lblHeading.grid(row=0, column=0, columnspan=2, sticky='we', padx=10, pady=10)
@@ -173,7 +173,7 @@ def adminDashboard(root, user_name):
         root.columnconfigure(6, weight=1)
         lblTitle = Label(addBook, text='Title', font='Arial 12')
         lblTitle.grid(row=1, column=0, pady=5)
-        txtTitle = Entry(addBook, font='Arial 16', textvariable=account)
+        txtTitle = Entry(addBook, font='Arial 16')
         txtTitle.grid(row=1, column=1, pady=5)
 
         lblAuthor = Label(addBook, text='Author', font='Arial 12')
@@ -184,7 +184,7 @@ def adminDashboard(root, user_name):
         lblCategory = Label(addBook, text='Category', font='Arial 12')
         lblCategory.grid(row=3, column=0, pady=5)
         txtCategory = ttk.Combobox(addBook, font='Arial 14')
-        txtCategory['values'] = ('Math', 'English')
+        txtCategory['values'] = (category)
         txtCategory.grid(row=3, column=1, pady=5)
 
         lblLanguague = Label(addBook, text='Languages', font='Arial 12')
