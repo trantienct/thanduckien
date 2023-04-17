@@ -4,7 +4,7 @@ createTable()
 conn = sqlite3.connect('Library_management.db')
 user_lists = [('admin', '123456789', 1), ('student', '123456789',1)]
 role_lists = [(1, 'Administrator'), (2, 'Student')]
-category_lists = [('Math'), ('Literature'), ('English')]
+category_lists = [(1, 'Math'), (2, 'Literature'), (3, 'English')]
 user_role_lists = [(1,1), (2,2)]
 
 
@@ -18,7 +18,7 @@ for user_role in user_role_lists:
     conn.execute('INSERT INTO user_roles (user_id, role_id) VALUES (?,?)', (user_role[0], user_role[1]))
     conn.commit()
 for category in category_lists:
-    conn.execute('INSERT INTO category (category_name) VALUES(?)', (category[1]))
+    conn.execute('INSERT INTO category (id, category_name) VALUES(?, ?)', (category[0], category[1]))
     conn.commit()
 conn.close()
 
