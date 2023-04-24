@@ -42,11 +42,12 @@ def createTable():
         CREATE TABLE books
         (
         book_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        book_name TEXT
+        book_title TEXT
         book_author TEXT
         book_language TEXT
         book_category_id INTEGER
         book_position TEXT
+        book_pages INTEGER
         insert_date TEXT
         status TEXT);''')
 

@@ -52,7 +52,7 @@ def validateUser(username, password):
 def validateBook(title, author, category, languages, insert_date):
     result = {'status': '', 'title': '', 'author': '', 'category':'', 'languages':'', 'insert_date':''}
     current_time = datetime.now().date()
-    insert_date_format = datetime.strptime(insert_date, '%d/%m/$Y').date()
+    insert_date_format = datetime.strptime(insert_date, '%d/%m/%Y').date()
     if len(title) >= 50:
         result['title'] = "Your title can't be more than 50 charaters"
         result['status'] = False
@@ -72,8 +72,9 @@ def validateBook(title, author, category, languages, insert_date):
         result['languages'] = "languages can't be null"
         result['status'] = False
     if insert_date_format > current_time:
-        result['insert_date'] = ["Your insert date can't be bigger than current date"]
+        result['insert_date'] = "Your insert date can't be bigger than current date"
         result['status'] = False
+    return result
 
 
 
