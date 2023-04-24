@@ -42,13 +42,13 @@ def createTable():
         CREATE TABLE books
         (
         book_id INTEGER PRIMARY KEY AUTOINCREMENT,
-        book_title TEXT
-        book_author TEXT
-        book_language TEXT
-        book_category_id INTEGER
-        book_position TEXT
-        book_pages INTEGER
-        insert_date TEXT
+        book_title TEXT,
+        book_author TEXT,
+        book_language TEXT,
+        book_category_id INTEGER,
+        book_position TEXT,
+        book_pages INTEGER,
+        insert_date TEXT,
         status TEXT);''')
 
 
@@ -58,9 +58,9 @@ def createTable():
         CREATE TABLE book_orders
         (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        student_id INTEGER
-        book_id INTEGER
-        borrow_date TEXT
+        student_id INTEGER,
+        book_id INTEGER,
+        borrow_date TEXT,
         return_date TEXT
         );
         ''')

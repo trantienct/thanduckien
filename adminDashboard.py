@@ -234,16 +234,19 @@ def adminDashboard(root, user_name):
             book_author = author.get()
             book_category = category_name.get()
             book_languagues = languagues.get()
+
             book_pages = pages.get()
             book_insert_date = insert_date.get()
             book_position = position.get()
+            book_status = 'open'
             cur = conn.execute('SELECT id FROM category WHERE category_name = ?',(book_category,))
-            book_category_id = cur.fetchone()
-            print(book_author)
+            row = cur.fetchone()
+            book_category_id = row[0]
             check = validateBook(book_title, book_author,book_category,book_languagues, book_insert_date)
-            print(check)
+            params = [book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date]
+            print(params)
             if check['status'] == True:
-                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date) VALUES(?,?,?,?,?,?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, insert_date))
+                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date, book_status))
                 messagebox.showinfo('Add book', 'Add book successfully')
                 addBook.withdraw()
                 conn.commit()
