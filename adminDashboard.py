@@ -155,26 +155,28 @@ def adminDashboard(root, user_name):
         for i in row:
             edit_user.insert('',END,values=(i[0], i[1], i[2]))
     def viewBooklist():
-        def bookInfo():
+        def bookInfo(event):
             title = StringVar()
-            status = StringVar()
+            author = StringVar()
             index = view_book.focus()
             selectValue = view_book.item(index)
             bookData = selectValue['values']
+            print(bookData)
             title.set(bookData[0])
-            status.set(bookData[6])
+            author.set(bookData[1])
             Info = Toplevel(root)
             Info.title('User Info')
             Info.geometry('400x400')
             Title = Label(Info, textvariable=title)
             Title.grid(column=0,row=0)
-            Title = Label(Info, textvariable=status)
-            Title.grid(column=0, row=1)
+            Author = Label(Info, textvariable=author)
+            Author.grid(column=0, row=1)
             img = Image.open('img.png')
             img.resize((100, 100))
             label_image = ImageTk.PhotoImage(img)
             lblImage = Label(root, image=label_image)
-            lblImage.grid(column=2, row=0, rowspan=3)
+            lblImage.grid(column=0, row=3)
+            Info.mainloop()
 
         book_list = Toplevel(root)
         book_list.title('View book list')
@@ -188,16 +190,13 @@ def adminDashboard(root, user_name):
         view_book.heading('page', text='Page')
         view_book.heading('status', text='Status')
         view_book.grid(column=0,row=0, sticky='nsew')
-        view_book.bind("<ButtonRelease-1>",bookInfo )
         cur = conn.execute('''SELECT books.book_title, books.book_author,category.category_name, books.book_language,books.book_pages, books.status, category.category_name 
                               FROM books
                               LEFT JOIN category ON book_category_id = category.id ''')
-
-
         row = cur.fetchall()
         for i in row:
             view_book.insert('',END,values=(i[0], i[1], i[2]))
-
+        view_book.bind("<ButtonRelease-1>", bookInfo)
     def addBook():
         addBook = Toplevel(root)
         addBook.geometry('600x600')
