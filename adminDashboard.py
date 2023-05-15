@@ -156,26 +156,29 @@ def adminDashboard(root, user_name):
         for i in row:
             edit_user.insert('',END,values=(i[0], i[1], i[2]))
     def viewBooklist():
-        def bookInfo():
+        def bookInfo(event):
             title = StringVar()
-            status = StringVar()
+            author = StringVar()
             index = view_book.focus()
             selectValue = view_book.item(index)
             bookData = selectValue['values']
+            print(bookData)
             title.set(bookData[0])
-            status.set(bookData[6])
+            author.set(bookData[1])
             Info = Toplevel(root)
             Info.title('User Info')
             Info.geometry('400x400')
             Title = Label(Info, textvariable=title)
             Title.grid(column=0,row=0)
-            Title = Label(Info, textvariable=status)
-            Title.grid(column=0, row=1)
+            Author = Label(Info, textvariable=author)
+            Author.grid(column=0, row=1)
             img = Image.open('img.png')
             img.resize((100, 100))
             label_image = ImageTk.PhotoImage(img)
             lblImage = Label(root, image=label_image)
-            lblImage.grid(column=2, row=0, rowspan=3)
+            lblImage.grid(column=0, row=3)
+            Info.mainloop()
+
 
         book_list = Toplevel(root)
         book_list.title('View book list')
@@ -275,8 +278,9 @@ def adminDashboard(root, user_name):
         lblPosition.grid(row=13, column=0, pady=5)
         txtPosition = Entry(addBook, font='Arial 16', textvariable=position)
         txtPosition.grid(row=13, column=1, pady=5)
+
+        global upload_file
         def executeAddBook():
-            global upload_file
             book_title = title.get()
             book_author = author.get()
             book_category = category_name.get()
@@ -293,7 +297,7 @@ def adminDashboard(root, user_name):
             params = [book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date]
             print(params)
             if check['status'] == True:
-                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date, status) VALUES(?, ?, ?, ?, ?, ?, ?,?, ?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date,upload_file, book_status))
+                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date,cover_image, status) VALUES(?, ?, ?, ?, ?, ?, ?,?, ?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date,upload_file, book_status))
                 messagebox.showinfo('Add book', 'Add book successfully')
                 addBook.withdraw()
                 conn.commit()
