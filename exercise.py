@@ -1,11 +1,3 @@
-#Exercise 17/4/2023:
-# BT1: Hoan thanh them 1 cuon sach
-# - Validate data
-# - Check if book name exists
-# - If not, insert new book
-# - Else, show Messagebox
-# BT2:
-# Add column book_image to Book Table: book_image BLOB
-# Check mail and follow instruction
-# - Save to DB
-# - Load into tkinter
+#Exercise 15/5/2023:
+# BT1: Thêm Label để hiển thị image sau khi upload ở trang Addbook
+# BT2: Khi bấm xem chi tiết 1 cuốn sách ở View List Book để hiển thị qua Toplevel Detail, Hãy lấy image từ DB và hiển thị lên màn hình
