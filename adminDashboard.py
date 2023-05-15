@@ -6,6 +6,7 @@ from lib import *
 from PIL import ImageTk, Image
 from tkinter import filedialog
 conn = sqlite3.connect('Library_management.db')
+
 # User Management
 ## View User List
 ## Update User: Role, status
@@ -275,8 +276,13 @@ def adminDashboard(root, user_name):
         lblPosition.grid(row=13, column=0, pady=5)
         txtPosition = Entry(addBook, font='Arial 16', textvariable=position)
         txtPosition.grid(row=13, column=1, pady=5)
+        def takeImage():
+            global upload_file
+            file = filedialog.askopenfilename()
+            with open(file, 'rb') as loadFile:
+                blob_file = loadFile.read()
+            upload_file = blob_file
 
-        global upload_file
         def executeAddBook():
             book_title = title.get()
             book_author = author.get()
@@ -294,7 +300,7 @@ def adminDashboard(root, user_name):
             params = [book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date]
             print(params)
             if check['status'] == True:
-                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date,cover_image, status) VALUES(?, ?, ?, ?, ?, ?, ?,?, ?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date,upload_file, book_status))
+                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date,cover_image, status) VALUES(?, ?, ?, ?, ?, ?, ?,?, ?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date, upload_file, book_status))
                 messagebox.showinfo('Add book', 'Add book successfully')
                 addBook.withdraw()
                 conn.commit()
@@ -305,11 +311,7 @@ def adminDashboard(root, user_name):
                 error_category.set(check['category'])
                 error_languagues.set(check['languages'])
                 error_insertdate.set(check['insert_date'])
-        def takeImage():
-            file = filedialog.askopenfilename()
-            with open(file, 'rb') as loadFile:
-                blob_file = loadFile.read()
-            upload_file = blob_file
+
 
 
 
