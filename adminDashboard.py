@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import sqlite3
 from lib import *
+from PIL import ImageTk, Image
 conn = sqlite3.connect('Library_management.db')
 # User Management
 ## View User List
@@ -150,10 +151,52 @@ def adminDashboard(root, user_name):
                            LEFT JOIN user_roles ON users.id = user_roles.user_id
                            LEFT JOIN roles ON user_roles.role_id = roles.id
                            ORDER BY users.id ASC ''')
-
         row = cur.fetchall()
         for i in row:
             edit_user.insert('',END,values=(i[0], i[1], i[2]))
+    def viewBooklist():
+        def bookInfo():
+            title = StringVar()
+            status = StringVar()
+            index = view_book.focus()
+            selectValue = view_book.item(index)
+            bookData = selectValue['values']
+            title.set(bookData[0])
+            status.set(bookData[6])
+            Info = Toplevel(root)
+            Info.title('User Info')
+            Info.geometry('400x400')
+            Title = Label(Info, textvariable=title)
+            Title.grid(column=0,row=0)
+            Title = Label(Info, textvariable=status)
+            Title.grid(column=0, row=1)
+            img = Image.open('img.png')
+            img.resize((100, 100))
+            label_image = ImageTk.PhotoImage(img)
+            lblImage = Label(root, image=label_image)
+            lblImage.grid(column=2, row=0, rowspan=3)
+
+        book_list = Toplevel(root)
+        book_list.title('View book list')
+        book_list.geometry('600x400')
+        columns =('title', 'author', 'category', 'language', 'page', 'status')
+        view_book = ttk.Treeview(book_list, columns=columns,show='headings')
+        view_book.heading('title', text='Title')
+        view_book.heading('author', text='Author')
+        view_book.heading('category', text='Category')
+        view_book.heading('language', text='Language')
+        view_book.heading('page', text='Page')
+        view_book.heading('status', text='Status')
+        view_book.grid(column=0,row=0, sticky='nsew')
+        view_book.bind("<ButtonRelease-1>",bookInfo )
+        cur = conn.execute('''SELECT books.book_title, books.book_author,category.category_name, books.book_language,books.book_pages, books.status, category.category_name 
+                              FROM books
+                              LEFT JOIN category ON book_category_id = category.id ''')
+
+
+        row = cur.fetchall()
+        for i in row:
+            view_book.insert('',END,values=(i[0], i[1], i[2]))
 
     def addBook():
         addBook = Toplevel(root)
@@ -287,4 +330,7 @@ def adminDashboard(root, user_name):
     lblBookManagement.grid(row=1, column=1, padx=10)
     btnAddBook = Button(admin, text='Add a book', font='Arial 12', command=addBook)
     btnAddBook.grid(row=2, column=1, padx=10)
+    btnViewBookList = Button(admin, text='View book list', font='Arial 12', command=viewBooklist)
+    btnViewBookList.grid(row=3, column=1, padx=10)
+
     admin.mainloop()
