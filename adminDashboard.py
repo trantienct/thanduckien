@@ -4,6 +4,7 @@ from tkinter import messagebox
 import sqlite3
 from lib import *
 from PIL import ImageTk, Image
+from tkinter import filedialog
 conn = sqlite3.connect('Library_management.db')
 # User Management
 ## View User List
@@ -188,7 +189,7 @@ def adminDashboard(root, user_name):
         view_book.heading('page', text='Page')
         view_book.heading('status', text='Status')
         view_book.grid(column=0,row=0, sticky='nsew')
-        view_book.bind("<ButtonRelease-1>",bookInfo )
+        view_book.bind("<ButtonRelease-1>",bookInfo)
         cur = conn.execute('''SELECT books.book_title, books.book_author,category.category_name, books.book_language,books.book_pages, books.status, category.category_name 
                               FROM books
                               LEFT JOIN category ON book_category_id = category.id ''')
@@ -268,11 +269,14 @@ def adminDashboard(root, user_name):
         errorInsert_date = Label(addBook, textvariable=error_insertdate)
         errorInsert_date.grid(row=12, column=1)
 
+
+
         lblPosition = Label(addBook, text='Position', font='Arial 12')
         lblPosition.grid(row=13, column=0, pady=5)
         txtPosition = Entry(addBook, font='Arial 16', textvariable=position)
         txtPosition.grid(row=13, column=1, pady=5)
         def executeAddBook():
+            global upload_file
             book_title = title.get()
             book_author = author.get()
             book_category = category_name.get()
@@ -289,7 +293,7 @@ def adminDashboard(root, user_name):
             params = [book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date]
             print(params)
             if check['status'] == True:
-                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date, status) VALUES(?, ?, ?, ?, ?, ?, ?, ?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date, book_status))
+                add_data = conn.execute('INSERT INTO books (book_title, book_author, book_language, book_category_id, book_position, book_pages, insert_date, status) VALUES(?, ?, ?, ?, ?, ?, ?,?, ?)',(book_title, book_author, book_languagues, book_category_id, book_position, book_pages, book_insert_date,upload_file, book_status))
                 messagebox.showinfo('Add book', 'Add book successfully')
                 addBook.withdraw()
                 conn.commit()
@@ -300,13 +304,21 @@ def adminDashboard(root, user_name):
                 error_category.set(check['category'])
                 error_languagues.set(check['languages'])
                 error_insertdate.set(check['insert_date'])
+        def takeImage():
+            file = filedialog.askopenfilename()
+            with open(file, 'rb') as loadFile:
+                blob_file = loadFile.read()
+            upload_file = blob_file
 
 
 
 
-
+        btnImage = Button(addBook, text='Image', font='Arial 12', command=takeImage)
+        btnImage.grid(row=14, column=0, pady=5)
         btn_add_book = Button(addBook, text='Add', font='Arial 10', width=15, command=executeAddBook)
         btn_add_book.grid(row=15, column=1, columnspan=2, sticky='we')
+
+
     admin = Toplevel(root)
     admin.columnconfigure(0, weight=1)
     admin.columnconfigure(1, weight=1)
