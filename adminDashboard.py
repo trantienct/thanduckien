@@ -192,16 +192,13 @@ def adminDashboard(root, user_name):
         view_book.heading('page', text='Page')
         view_book.heading('status', text='Status')
         view_book.grid(column=0,row=0, sticky='nsew')
-        view_book.bind("<ButtonRelease-1>",bookInfo)
         cur = conn.execute('''SELECT books.book_title, books.book_author,category.category_name, books.book_language,books.book_pages, books.status, category.category_name 
                               FROM books
                               LEFT JOIN category ON book_category_id = category.id ''')
-
-
         row = cur.fetchall()
         for i in row:
             view_book.insert('',END,values=(i[0], i[1], i[2]))
-
+        view_book.bind("<ButtonRelease-1>", bookInfo)
     def addBook():
         addBook = Toplevel(root)
         addBook.geometry('600x600')
