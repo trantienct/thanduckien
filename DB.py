@@ -49,6 +49,7 @@ def createTable():
         book_position TEXT,
         book_pages INTEGER,
         insert_date TEXT,
+        cover_image BLOB,
         status TEXT);''')
 
 
