@@ -282,6 +282,12 @@ def adminDashboard(root, user_name):
             with open(file, 'rb') as loadFile:
                 blob_file = loadFile.read()
             upload_file = blob_file
+            showImage()
+
+        def showImage():
+            image = ImageTk.PhotoImage(data=upload_file)
+            lblImage.config(image=image)
+            lblImage.image = image
 
         def executeAddBook():
             book_title = title.get()
@@ -320,6 +326,8 @@ def adminDashboard(root, user_name):
         btnImage.grid(row=14, column=0, pady=5)
         btn_add_book = Button(addBook, text='Add', font='Arial 10', width=15, command=executeAddBook)
         btn_add_book.grid(row=15, column=1, columnspan=2, sticky='we')
+        lblImage = Label(addBook)
+        lblImage.grid(row = 16, column= 0, columnspan=2)
 
 
     admin = Toplevel(root)
