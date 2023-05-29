@@ -158,26 +158,42 @@ def adminDashboard(root, user_name):
             edit_user.insert('',END,values=(i[0], i[1], i[2]))
     def viewBooklist():
         def bookInfo(event):
-            title = StringVar()
-            author = StringVar()
             index = view_book.focus()
             selectValue = view_book.item(index)
             bookData = selectValue['values']
             print(bookData)
-            title.set(bookData[0])
-            author.set(bookData[1])
             Info = Toplevel(root)
             Info.title('User Info')
             Info.geometry('400x400')
-            Title = Label(Info, textvariable=title)
+            Title = Label(Info, text=f'Title: {bookData[1]}',font=15)
             Title.grid(column=0,row=0)
-            Author = Label(Info, textvariable=author)
+            Author = Label(Info, text = f'Author: {bookData[2]}', font=15)
             Author.grid(column=0, row=1)
-            img = Image.open('img.png')
-            img.resize((100, 100))
-            label_image = ImageTk.PhotoImage(img)
-            lblImage = Label(root, image=label_image)
-            lblImage.grid(column=0, row=3)
+            Category = Label(Info, text=f'Category: {bookData[3]}', font=15)
+            Category.grid(column=0, row=2)
+            Language = Label(Info, text=f'Language: {bookData[4]}', font = 15)
+            Language.grid(column=0, row=3)
+            Image = Label(root)
+            Image.grid(column=1, row = 0, columnspan=2, rowspan=4)
+            cur = conn.execute('SELECT cover_image FROM books WHERE book_id = ?',(bookData[0],))
+            row = cur.fetchone()
+            image = row[0]
+            image_from_db = ImageTk.PhotoImage(data = image)
+            Image.config(image=image_from_db)
+            Image.image = image_from_db
+            columns = ('borrow_date', 'return_date', 'student_name')
+            book_order = ttk.Treeview(Info, columns=columns, show='headings')
+            book_order.heading('borrow_date', text='Borrow date')
+            book_order.heading('return_date', text='Return date')
+            book_order.heading('student_name', text='Student name')
+            book_order.grid(column=0, row=4, sticky='nsew')
+            cur = '''SELECT book_order.borrow_date, book_order.return_date, users.name
+                     FROM book_order
+                     LEFT JOIN users ON book_order.student_id = users.id
+                     WHERE book_order.book_id = bookData[0] ORDER BY book_order.borrow_date DESC'''
+            row = cur.fetchall()
+            for i in row:
+                book_order.insert('', END, values=(i[0], i[1], i[2]))
             Info.mainloop()
 
 
@@ -193,12 +209,12 @@ def adminDashboard(root, user_name):
         view_book.heading('page', text='Page')
         view_book.heading('status', text='Status')
         view_book.grid(column=0,row=0, sticky='nsew')
-        cur = conn.execute('''SELECT books.book_title, books.book_author,category.category_name, books.book_language,books.book_pages, books.status, category.category_name 
+        cur = conn.execute('''SELECT books.*, category.category_name 
                               FROM books
                               LEFT JOIN category ON book_category_id = category.id ''')
         row = cur.fetchall()
         for i in row:
-            view_book.insert('',END,values=(i[0], i[1], i[2]))
+            view_book.insert('',END,values=(i[0], i[1], i[2], i[3], i[4], i[5]))
         view_book.bind("<ButtonRelease-1>", bookInfo)
     def addBook():
         addBook = Toplevel(root)
@@ -282,12 +298,16 @@ def adminDashboard(root, user_name):
             with open(file, 'rb') as loadFile:
                 blob_file = loadFile.read()
             upload_file = blob_file
-            showImage()
+            showImage(file)
 
-        def showImage():
-            image = ImageTk.PhotoImage(data=upload_file)
-            lblImage.config(image=image)
-            lblImage.image = image
+        def showImage(file):
+            img = Image.open(file)
+            img.resize((50,50))
+            lbl_image = ImageTk.PhotoImage(img)
+            lblImage.config(image=lbl_image)
+            lblImage.image = lbl_image
+
+
 
         def executeAddBook():
             book_title = title.get()
@@ -326,7 +346,7 @@ def adminDashboard(root, user_name):
         btnImage.grid(row=14, column=0, pady=5)
         btn_add_book = Button(addBook, text='Add', font='Arial 10', width=15, command=executeAddBook)
         btn_add_book.grid(row=15, column=1, columnspan=2, sticky='we')
-        lblImage = Label(addBook)
+        lblImage = Label(addBook, height=100, width=100)
         lblImage.grid(row = 16, column= 0, columnspan=2)
 
 
