@@ -164,7 +164,7 @@ def adminDashboard(root, user_name):
             print(bookData)
             Info = Toplevel(root)
             Info.title('User Info')
-            Info.geometry('400x400')
+            Info.geometry('800x400')
             Title = Label(Info, text=f'Title: {bookData[1]}',font=15)
             Title.grid(column=0,row=0)
             Author = Label(Info, text = f'Author: {bookData[2]}', font=15)
@@ -173,24 +173,24 @@ def adminDashboard(root, user_name):
             Category.grid(column=0, row=2)
             Language = Label(Info, text=f'Language: {bookData[4]}', font = 15)
             Language.grid(column=0, row=3)
-            Image = Label(root)
-            Image.grid(column=1, row = 0, columnspan=2, rowspan=4)
+            lblImage = Label(Info, width=100, height=100)
+            lblImage.grid(column=1, row = 0, columnspan=2, rowspan=4)
             cur = conn.execute('SELECT cover_image FROM books WHERE book_id = ?',(bookData[0],))
             row = cur.fetchone()
             image = row[0]
             image_from_db = ImageTk.PhotoImage(data = image)
-            Image.config(image=image_from_db)
-            Image.image = image_from_db
+            lblImage.config(image=image_from_db)
+            lblImage.image = image_from_db
             columns = ('borrow_date', 'return_date', 'student_name')
             book_order = ttk.Treeview(Info, columns=columns, show='headings')
             book_order.heading('borrow_date', text='Borrow date')
             book_order.heading('return_date', text='Return date')
             book_order.heading('student_name', text='Student name')
             book_order.grid(column=0, row=4, sticky='nsew')
-            cur = '''SELECT book_order.borrow_date, book_order.return_date, users.name
-                     FROM book_order
-                     LEFT JOIN users ON book_order.student_id = users.id
-                     WHERE book_order.book_id = bookData[0] ORDER BY book_order.borrow_date DESC'''
+            cur = conn.execute('''SELECT book_orders.borrow_date, book_orders.return_date, users.username
+                     FROM book_orders
+                     LEFT JOIN users ON book_orders.student_id = users.id
+                     WHERE book_orders.book_id = ? ORDER BY book_orders.borrow_date DESC''', (bookData[0],))
             row = cur.fetchall()
             for i in row:
                 book_order.insert('', END, values=(i[0], i[1], i[2]))
