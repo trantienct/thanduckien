@@ -1,3 +1,4 @@
+import io
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -163,22 +164,90 @@ def adminDashboard(root, user_name):
             bookData = selectValue['values']
             print(bookData)
             Info = Toplevel(root)
-            Info.title('User Info')
-            Info.geometry('800x400')
-            Title = Label(Info, text=f'Title: {bookData[1]}',font=15)
-            Title.grid(column=0,row=0)
-            Author = Label(Info, text = f'Author: {bookData[2]}', font=15)
-            Author.grid(column=0, row=1)
-            Category = Label(Info, text=f'Category: {bookData[3]}', font=15)
-            Category.grid(column=0, row=2)
-            Language = Label(Info, text=f'Language: {bookData[4]}', font = 15)
-            Language.grid(column=0, row=3)
+            Info.title('book Info')
+            Info.geometry('600x400')
+            def update_info():
+                stored_title = StringVar()
+                stored_author = StringVar()
+                stored_category = StringVar()
+                stored_language = StringVar()
+                stored_position = StringVar()
+                stored_status = StringVar()
+
+
+
+
+                Info.withdraw
+                update = Toplevel(root)
+                update.title('Update book info')
+                update.geometry('600x600')
+                book = conn.execute('''SELECT books.*, category.category_name 
+                                              FROM books
+                                              LEFT JOIN category ON books.book_category_id = category.id
+                                        WHERE books.book_id =?''', (bookData[0],))
+                result = book.fetchone()
+                stored_title.set(result[1])
+                stored_author.set(result[2])
+                stored_category.set(result[10])
+                stored_language.set(result[3])
+                stored_position.set(result[5])
+                stored_status.set(result[9])
+                category = conn.execute('''SELECT category_name from category''')
+                category_name = category.fetchall()
+                result2 = [x[0] for x in category_name]
+                lblTitle = Label(update, text = 'Book title:')
+                lblTitle.grid(column=0, row = 0, sticky='w')
+                entryTitle = Entry(update, textvariable=stored_title)
+                entryTitle.grid(column=1, row = 0)
+                lblAuthor = Label(update, text='Book author:')
+                lblAuthor.grid(column=0, row=1, sticky='w')
+                entryAuthor = Entry(update, textvariable=stored_author)
+                entryAuthor.grid(column=1, row=1)
+                Category = Label(update, text = 'Book category:')
+                Category.grid(row =2, column=0)
+                print(stored_category.get())
+                ComboCategory = ttk.Combobox(update, font='Arial 16', textvariable=stored_category)
+                ComboCategory['values'] = result2
+                ComboCategory.grid(row=2, column=1, pady=5)
+                Language = Label(update, text = 'Book language:')
+                Language.grid(row = 3, column=0)
+                ComboLanguage = ttk.Combobox(update, font='Arial 16', textvariable=stored_language)
+                ComboLanguage['values'] = ['Vietnamese', 'English', ' French']
+                ComboLanguage.grid(row=3, column=1, pady=5)
+                lblPosition = Label(update, text='Book position:')
+                lblPosition.grid(column=0, row=4, sticky='w')
+                entryPosition = Entry(update, textvariable=stored_position)
+                entryPosition.grid(column=1, row=4)
+                Status = Label(update, text='Status:')
+                Status.grid(row=5, column=0)
+                ComboStatus = ttk.Combobox(update, font='Arial 16', textvariable=stored_status)
+                ComboStatus['values'] = ['Open','Close']
+                ComboStatus.grid(row=5, column=1, pady=5)
+                BtnReset = Button(update, text='Reset')
+                BtnReset.grid(row = 6, column=0)
+                BtnUpdate = Button(update, text= 'Update')
+                BtnUpdate.grid(row = 6, column=1)
+
+
+
+
+
+            Title = Label(Info, text=f'Title: {bookData[1]}',font=20)
+            Title.grid(column=0,row=0, sticky='w', pady=10)
+            Author = Label(Info, text = f'Author: {bookData[2]}', font=20)
+            Author.grid(column=0, row=1, sticky='w')
+            Category = Label(Info, text=f'Category: {bookData[3]}', font=20)
+            Category.grid(column=0, row=2, sticky='w', pady=10)
+            Language = Label(Info, text=f'Language: {bookData[4]}', font = 20)
+            Language.grid(column=0, row=3, sticky='w', pady=1)
             lblImage = Label(Info, width=100, height=100)
             lblImage.grid(column=1, row = 0, columnspan=2, rowspan=4)
             cur = conn.execute('SELECT cover_image FROM books WHERE book_id = ?',(bookData[0],))
             row = cur.fetchone()
             image = row[0]
-            image_from_db = ImageTk.PhotoImage(data = image)
+            cover_image = Image.open(io.BytesIO(image))
+            resize_image = cover_image.resize((100,100))
+            image_from_db = ImageTk.PhotoImage(resize_image)
             lblImage.config(image=image_from_db)
             lblImage.image = image_from_db
             columns = ('borrow_date', 'return_date', 'student_name')
@@ -186,7 +255,7 @@ def adminDashboard(root, user_name):
             book_order.heading('borrow_date', text='Borrow date')
             book_order.heading('return_date', text='Return date')
             book_order.heading('student_name', text='Student name')
-            book_order.grid(column=0, row=4, sticky='nsew')
+            book_order.grid(column=0, row=4, sticky='nsew', columnspan=3)
             cur = conn.execute('''SELECT book_orders.borrow_date, book_orders.return_date, users.username
                      FROM book_orders
                      LEFT JOIN users ON book_orders.student_id = users.id
@@ -194,12 +263,18 @@ def adminDashboard(root, user_name):
             row = cur.fetchall()
             for i in row:
                 book_order.insert('', END, values=(i[0], i[1], i[2]))
+
+
+            btnDelete = Button(Info, text ='Delete')
+            btnDelete.grid(column=0, row = 5)
+            btnUpdate = Button(Info, text = 'Update', command=update_info)
+            btnUpdate.grid(column = 1, row = 5)
             Info.mainloop()
 
 
         book_list = Toplevel(root)
         book_list.title('View book list')
-        book_list.geometry('600x400')
+        book_list.geometry('1200x800')
         columns =('title', 'author', 'category', 'language', 'page', 'status')
         view_book = ttk.Treeview(book_list, columns=columns,show='headings')
         view_book.heading('title', text='Title')
@@ -214,7 +289,7 @@ def adminDashboard(root, user_name):
                               LEFT JOIN category ON book_category_id = category.id ''')
         row = cur.fetchall()
         for i in row:
-            view_book.insert('',END,values=(i[0], i[1], i[2], i[3], i[4], i[5]))
+            view_book.insert('',END,values=(i[0], i[1], i[2], i[3], i[4], i[9]))
         view_book.bind("<ButtonRelease-1>", bookInfo)
     def addBook():
         addBook = Toplevel(root)
