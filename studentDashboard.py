@@ -8,25 +8,35 @@ from PIL import ImageTk, Image
 from tkinter import filedialog
 conn = sqlite3.connect('Library_management.db')
 
-def studentDashboard(root, username, password):
+def studentDashboard(root, username, password, user_id):
     def updateInfo():
         user_info = Toplevel(root)
         user_info.title('User Info')
         user_info.geometry('600x400')
         stored_username = StringVar()
-        stored_password = StringVar()
+        old_pw = StringVar()
+        new_pw = StringVar()
+        retype_pw = StringVar()
         stored_username.set(username)
-        stored_password.set(password)
+        # stored_password.set(password)
         lblUsername = Label(user_info, text='Username')
         lblUsername.grid(column=0, row=0, sticky='w')
         entryUsername = Entry(user_info, textvariable=stored_username)
         entryUsername.grid(column=1, row=0)
-        lblPassword = Label(user_info, text='Password:')
+        lblPassword = Label(user_info, text='Old Password:')
         lblPassword.grid(column=0, row=1, sticky='w')
-        entryPassword = Entry(user_info, textvariable=stored_password)
+        entryPassword = Entry(user_info, textvariable=old_pw)
         entryPassword.grid(column=1, row=1)
+        lblPassword_1 = Label(user_info, text='New Password:')
+        lblPassword_1.grid(column=0, row=2, sticky='w')
+        entryPassword_1 = Entry(user_info, textvariable=new_pw)
+        entryPassword_1.grid(column=1, row=2)
+        lblPassword_2 = Label(user_info, text='Confirm New Password:')
+        lblPassword_2.grid(column=0, row=3, sticky='w')
+        entryPassword_2 = Entry(user_info, textvariable=retype_pw)
+        entryPassword_2.grid(column=1, row=3)
         btnUpdate = Button(user_info, text = 'Update')
-        btnUpdate.grid(column=0, row=2, columnspan=2)
+        btnUpdate.grid(column=0, row=4, columnspan=2)
         user_info.mainloop()
 
     def viewBookList():
