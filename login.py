@@ -23,7 +23,7 @@ def loginPage(root):
                         adminDashboard(root, account.get())
                     elif role[0] == 'Student':
                         root.withdraw()
-                        studentDashboard()
+                        studentDashboard(root, account.get(), password.get())
                 else:
                     messagebox.showinfo('Error', 'Your account is inactive')
 
